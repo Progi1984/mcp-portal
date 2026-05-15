@@ -10,10 +10,10 @@ class CastopodCredentialsTest extends TestCase
     public function testFromArrayWithAllFields(): void
     {
         $credentials = CastopodCredentials::fromArray([
-            'url'         => 'https://podcasts.example.com',
-            'username'    => 'admin',
-            'password'    => 'secret',
-            'op3ApiKey'   => 'key123',
+            'url' => 'https://podcasts.example.com',
+            'username' => 'admin',
+            'password' => 'secret',
+            'op3ApiKey' => 'key123',
             'op3ShowUuid' => 'uuid-abc',
         ]);
 
@@ -27,7 +27,7 @@ class CastopodCredentialsTest extends TestCase
     public function testFromArrayWithoutOp3Fields(): void
     {
         $credentials = CastopodCredentials::fromArray([
-            'url'      => 'https://example.com',
+            'url' => 'https://example.com',
             'username' => 'user',
             'password' => 'pass',
         ]);
@@ -39,18 +39,18 @@ class CastopodCredentialsTest extends TestCase
     public function testToArray(): void
     {
         $credentials = new CastopodCredentials(
-            url:         'https://example.com',
-            username:    'user',
-            password:    'pass',
-            op3ApiKey:   'key',
+            url: 'https://example.com',
+            username: 'user',
+            password: 'pass',
+            op3ApiKey: 'key',
             op3ShowUuid: 'uuid',
         );
 
         $this->assertSame([
-            'url'         => 'https://example.com',
-            'username'    => 'user',
-            'password'    => 'pass',
-            'op3ApiKey'   => 'key',
+            'url' => 'https://example.com',
+            'username' => 'user',
+            'password' => 'pass',
+            'op3ApiKey' => 'key',
             'op3ShowUuid' => 'uuid',
         ], $credentials->toArray());
     }
@@ -58,10 +58,10 @@ class CastopodCredentialsTest extends TestCase
     public function testRoundtrip(): void
     {
         $data = [
-            'url'         => 'https://example.com',
-            'username'    => 'user',
-            'password'    => 'pass',
-            'op3ApiKey'   => 'k',
+            'url' => 'https://example.com',
+            'username' => 'user',
+            'password' => 'pass',
+            'op3ApiKey' => 'k',
             'op3ShowUuid' => 'u',
         ];
 

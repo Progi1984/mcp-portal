@@ -21,17 +21,17 @@ class ProjectControllerTest extends WebTestCase
     {
         parent::setUp();
         $this->client = static::createClient();
-        $container    = static::getContainer();
-        $this->em     = $container->get('doctrine.orm.entity_manager');
+        $container = static::getContainer();
+        $this->em = $container->get('doctrine.orm.entity_manager');
 
         $schemaTool = new SchemaTool($this->em);
-        $metadata   = $this->em->getMetadataFactory()->getAllMetadata();
+        $metadata = $this->em->getMetadataFactory()->getAllMetadata();
         $schemaTool->dropSchema($metadata);
         $schemaTool->createSchema($metadata);
 
         $this->ownerUser = (new User())->setEmail('owner@test.com')->setPassword('x');
         $this->otherUser = (new User())->setEmail('other@test.com')->setPassword('x');
-        $this->project   = (new Project())->setName('Test Project')->setUser($this->ownerUser);
+        $this->project = (new Project())->setName('Test Project')->setUser($this->ownerUser);
 
         $this->em->persist($this->ownerUser);
         $this->em->persist($this->otherUser);
@@ -73,14 +73,14 @@ class ProjectControllerTest extends WebTestCase
     public function testShowAllowedForOwner(): void
     {
         $this->client->loginUser($this->ownerUser);
-        $this->client->request('GET', '/projects/' . $this->project->getId());
+        $this->client->request('GET', '/projects/'.$this->project->getId());
         $this->assertResponseIsSuccessful();
     }
 
     public function testShowForbiddenForNonOwner(): void
     {
         $this->client->loginUser($this->otherUser);
-        $this->client->request('GET', '/projects/' . $this->project->getId());
+        $this->client->request('GET', '/projects/'.$this->project->getId());
         $this->assertResponseStatusCodeSame(403);
     }
 
@@ -97,7 +97,7 @@ class ProjectControllerTest extends WebTestCase
     {
         $this->client->loginUser($this->ownerUser);
         $crawler = $this->client->request('GET', '/projects/new');
-        $form    = $crawler->filterXPath('//form[@name="project"]')->form([
+        $form = $crawler->filterXPath('//form[@name="project"]')->form([
             'project[name]' => 'My New Project',
         ]);
 
@@ -110,14 +110,14 @@ class ProjectControllerTest extends WebTestCase
     public function testEditAllowedForOwner(): void
     {
         $this->client->loginUser($this->ownerUser);
-        $this->client->request('GET', '/projects/' . $this->project->getId() . '/edit');
+        $this->client->request('GET', '/projects/'.$this->project->getId().'/edit');
         $this->assertResponseIsSuccessful();
     }
 
     public function testEditForbiddenForNonOwner(): void
     {
         $this->client->loginUser($this->otherUser);
-        $this->client->request('GET', '/projects/' . $this->project->getId() . '/edit');
+        $this->client->request('GET', '/projects/'.$this->project->getId().'/edit');
         $this->assertResponseStatusCodeSame(403);
     }
 
@@ -126,7 +126,7 @@ class ProjectControllerTest extends WebTestCase
     public function testDeleteForbiddenForNonOwner(): void
     {
         $this->client->loginUser($this->otherUser);
-        $this->client->request('POST', '/projects/' . $this->project->getId() . '/delete', [
+        $this->client->request('POST', '/projects/'.$this->project->getId().'/delete', [
             '_token' => 'any',
         ]);
         $this->assertResponseStatusCodeSame(403);
@@ -140,12 +140,12 @@ class ProjectControllerTest extends WebTestCase
 
         // The delete form and its CSRF token are rendered on the index page
         $crawler = $this->client->request('GET', '/projects');
-        $token   = $crawler
+        $token = $crawler
             ->filterXPath('//form[contains(@action, "/delete")]//input[@name="_token"]')
             ->first()
             ->attr('value');
 
-        $this->client->request('POST', '/projects/' . $projectId . '/delete', ['_token' => $token]);
+        $this->client->request('POST', '/projects/'.$projectId.'/delete', ['_token' => $token]);
         $this->assertResponseRedirects('/projects');
 
         $this->em->clear();
@@ -157,7 +157,7 @@ class ProjectControllerTest extends WebTestCase
         $this->client->loginUser($this->ownerUser);
 
         $projectId = (string) $this->project->getId();
-        $this->client->request('POST', '/projects/' . $projectId . '/delete', ['_token' => 'bad-token']);
+        $this->client->request('POST', '/projects/'.$projectId.'/delete', ['_token' => 'bad-token']);
         $this->assertResponseRedirects('/projects');
 
         $this->em->clear();

@@ -11,7 +11,7 @@ class GoogleSearchConsoleCredentialsTest extends TestCase
     {
         $credentials = GoogleSearchConsoleCredentials::fromArray([
             'serviceAccountJson' => '{"type":"service_account"}',
-            'siteUrl'            => 'https://example.com/',
+            'siteUrl' => 'https://example.com/',
         ]);
 
         $this->assertSame('{"type":"service_account"}', $credentials->serviceAccountJson);
@@ -22,12 +22,12 @@ class GoogleSearchConsoleCredentialsTest extends TestCase
     {
         $credentials = new GoogleSearchConsoleCredentials(
             serviceAccountJson: '{"foo":"bar"}',
-            siteUrl:            'sc-domain:example.com',
+            siteUrl: 'sc-domain:example.com',
         );
 
         $this->assertSame([
             'serviceAccountJson' => '{"foo":"bar"}',
-            'siteUrl'            => 'sc-domain:example.com',
+            'siteUrl' => 'sc-domain:example.com',
         ], $credentials->toArray());
     }
 

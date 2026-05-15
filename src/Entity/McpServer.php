@@ -27,12 +27,12 @@ class McpServer
     #[ORM\Column(length: 64, unique: true)]
     private string $clientSecret;
 
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $encryptedCredentials = null;
 
     #[ORM\ManyToOne(inversedBy: 'mcpServers')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Project $project = null;
+    private Project $project;
 
     #[ORM\Column]
     private \DateTimeImmutable $createdAt;
@@ -45,39 +45,85 @@ class McpServer
         $this->createdAt = new \DateTimeImmutable();
     }
 
-    public function getId(): Uuid { return $this->id; }
+    public function getId(): Uuid
+    {
+        return $this->id;
+    }
 
-    public function getName(): string { return $this->name; }
-    public function setName(string $name): static { $this->name = $name; return $this; }
+    public function getName(): string
+    {
+        return $this->name;
+    }
 
-    public function getType(): McpServerType { return $this->type; }
-    public function setType(McpServerType $type): static { $this->type = $type; return $this; }
+    public function setName(string $name): static
+    {
+        $this->name = $name;
 
-    public function getAccessToken(): string { return $this->accessToken; }
+        return $this;
+    }
+
+    public function getType(): McpServerType
+    {
+        return $this->type;
+    }
+
+    public function setType(McpServerType $type): static
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getAccessToken(): string
+    {
+        return $this->accessToken;
+    }
 
     public function regenerateToken(): static
     {
         $this->accessToken = bin2hex(random_bytes(32));
+
         return $this;
     }
 
-    public function getClientSecret(): string { return $this->clientSecret; }
+    public function getClientSecret(): string
+    {
+        return $this->clientSecret;
+    }
 
     public function regenerateClientSecret(): static
     {
         $this->clientSecret = bin2hex(random_bytes(32));
+
         return $this;
     }
 
-    public function getEncryptedCredentials(): ?string { return $this->encryptedCredentials; }
+    public function getEncryptedCredentials(): ?string
+    {
+        return $this->encryptedCredentials;
+    }
+
     public function setEncryptedCredentials(string $encryptedCredentials): static
     {
         $this->encryptedCredentials = $encryptedCredentials;
+
         return $this;
     }
 
-    public function getProject(): ?Project { return $this->project; }
-    public function setProject(?Project $project): static { $this->project = $project; return $this; }
+    public function getProject(): Project
+    {
+        return $this->project;
+    }
 
-    public function getCreatedAt(): \DateTimeImmutable { return $this->createdAt; }
+    public function setProject(Project $project): static
+    {
+        $this->project = $project;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): \DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
 }

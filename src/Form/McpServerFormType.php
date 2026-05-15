@@ -21,14 +21,18 @@ class McpServerFormType extends AbstractType
     {
         $builder->add('name', TextType::class, [
             'label' => 'form.mcp.name',
-            'attr'  => ['class' => 'form-control', 'placeholder' => 'form.mcp.name_placeholder'],
+            'attr' => ['class' => 'form-control', 'placeholder' => 'form.mcp.name_placeholder'],
             'constraints' => [new NotBlank(message: 'validation.name_required')],
         ]);
 
-        match ($options['server_type']) {
-            McpServerType::Castopod            => $this->addCastopodFields($builder),
+        $serverType = $options['server_type'];
+        if (!$serverType instanceof McpServerType) {
+            return;
+        }
+        match ($serverType) {
+            McpServerType::Castopod => $this->addCastopodFields($builder),
             McpServerType::GoogleSearchConsole => $this->addGscFields($builder),
-            McpServerType::Matomo              => $this->addMatomoFields($builder),
+            McpServerType::Matomo => $this->addMatomoFields($builder),
         };
     }
 
@@ -36,24 +40,24 @@ class McpServerFormType extends AbstractType
     {
         $builder
             ->add('matomoUrl', UrlType::class, [
-                'label'   => 'form.mcp.matomo.url',
-                'mapped'  => false,
-                'attr'    => ['class' => 'form-control', 'placeholder' => 'https://analytics.example.com'],
+                'label' => 'form.mcp.matomo.url',
+                'mapped' => false,
+                'attr' => ['class' => 'form-control', 'placeholder' => 'https://analytics.example.com'],
                 'constraints' => [
                     new NotBlank(message: 'validation.url_required'),
                     new Url(message: 'validation.url_invalid'),
                 ],
             ])
             ->add('matomoApiToken', TextType::class, [
-                'label'  => 'form.mcp.matomo.api_token',
+                'label' => 'form.mcp.matomo.api_token',
                 'mapped' => false,
-                'attr'   => ['class' => 'form-control font-monospace', 'placeholder' => 'abc123…', 'autocomplete' => 'off'],
+                'attr' => ['class' => 'form-control font-monospace', 'placeholder' => 'abc123…', 'autocomplete' => 'off'],
                 'constraints' => [new NotBlank(message: 'validation.api_token_required')],
             ])
             ->add('matomoSiteId', IntegerType::class, [
-                'label'  => 'form.mcp.matomo.site_id',
+                'label' => 'form.mcp.matomo.site_id',
                 'mapped' => false,
-                'attr'   => ['class' => 'form-control', 'min' => 1],
+                'attr' => ['class' => 'form-control', 'min' => 1],
                 'constraints' => [
                     new NotBlank(message: 'validation.site_id_required'),
                     new Positive(message: 'validation.site_id_positive'),
@@ -65,20 +69,20 @@ class McpServerFormType extends AbstractType
     {
         $builder
             ->add('gscSiteUrl', TextType::class, [
-                'label'  => 'form.mcp.gsc.site_url',
+                'label' => 'form.mcp.gsc.site_url',
                 'mapped' => false,
-                'attr'   => [
-                    'class'       => 'form-control font-monospace',
+                'attr' => [
+                    'class' => 'form-control font-monospace',
                     'placeholder' => 'https://example.com/ or sc-domain:example.com',
                 ],
                 'constraints' => [new NotBlank(message: 'validation.gsc.site_url_required')],
             ])
             ->add('gscServiceAccountJson', TextareaType::class, [
-                'label'  => 'form.mcp.gsc.service_account_json',
+                'label' => 'form.mcp.gsc.service_account_json',
                 'mapped' => false,
-                'attr'   => [
-                    'class'       => 'form-control font-monospace',
-                    'rows'        => 8,
+                'attr' => [
+                    'class' => 'form-control font-monospace',
+                    'rows' => 8,
                     'placeholder' => "{\n  \"type\": \"service_account\",\n  \"project_id\": \"…\"\n}",
                     'autocomplete' => 'off',
                 ],
@@ -90,44 +94,44 @@ class McpServerFormType extends AbstractType
     {
         $builder
             ->add('castopodUrl', UrlType::class, [
-                'label'  => 'form.mcp.castopod.url',
+                'label' => 'form.mcp.castopod.url',
                 'mapped' => false,
-                'attr'   => ['class' => 'form-control', 'placeholder' => 'https://podcasts.example.com'],
+                'attr' => ['class' => 'form-control', 'placeholder' => 'https://podcasts.example.com'],
                 'constraints' => [
                     new NotBlank(message: 'validation.url_required'),
                     new Url(message: 'validation.url_invalid'),
                 ],
             ])
             ->add('castopodUsername', TextType::class, [
-                'label'  => 'form.mcp.castopod.username',
+                'label' => 'form.mcp.castopod.username',
                 'mapped' => false,
-                'attr'   => ['class' => 'form-control', 'autocomplete' => 'off'],
+                'attr' => ['class' => 'form-control', 'autocomplete' => 'off'],
                 'constraints' => [new NotBlank(message: 'validation.castopod.username_required')],
             ])
             ->add('castopodPassword', TextType::class, [
-                'label'  => 'form.mcp.castopod.password',
+                'label' => 'form.mcp.castopod.password',
                 'mapped' => false,
-                'attr'   => ['class' => 'form-control font-monospace', 'autocomplete' => 'off'],
+                'attr' => ['class' => 'form-control font-monospace', 'autocomplete' => 'off'],
                 'constraints' => [new NotBlank(message: 'validation.castopod.password_required')],
             ])
             ->add('castopodOp3ApiKey', TextType::class, [
-                'label'    => 'form.mcp.castopod.op3_api_key',
-                'mapped'   => false,
+                'label' => 'form.mcp.castopod.op3_api_key',
+                'mapped' => false,
                 'required' => false,
-                'attr'     => ['class' => 'form-control font-monospace', 'placeholder' => 'Your op3.dev API key', 'autocomplete' => 'off'],
+                'attr' => ['class' => 'form-control font-monospace', 'placeholder' => 'Your op3.dev API key', 'autocomplete' => 'off'],
             ])
             ->add('castopodOp3ShowUuid', TextType::class, [
-                'label'    => 'form.mcp.castopod.op3_show_uuid',
-                'mapped'   => false,
+                'label' => 'form.mcp.castopod.op3_show_uuid',
+                'mapped' => false,
                 'required' => false,
-                'attr'     => ['class' => 'form-control font-monospace', 'placeholder' => 'e.g. a18389b8a52d4112a782b32f40f73df6'],
+                'attr' => ['class' => 'form-control font-monospace', 'placeholder' => 'e.g. a18389b8a52d4112a782b32f40f73df6'],
             ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'  => McpServer::class,
+            'data_class' => McpServer::class,
             'server_type' => null,
         ]);
 

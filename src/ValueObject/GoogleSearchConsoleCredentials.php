@@ -7,7 +7,8 @@ class GoogleSearchConsoleCredentials
     public function __construct(
         public readonly string $serviceAccountJson,
         public readonly string $siteUrl,
-    ) {}
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {
@@ -21,7 +22,7 @@ class GoogleSearchConsoleCredentials
     {
         return [
             'serviceAccountJson' => $this->serviceAccountJson,
-            'siteUrl'            => $this->siteUrl,
+            'siteUrl' => $this->siteUrl,
         ];
     }
 }

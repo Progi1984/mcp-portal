@@ -10,9 +10,9 @@ class MatomoCredentialsTest extends TestCase
     public function testFromArray(): void
     {
         $credentials = MatomoCredentials::fromArray([
-            'url'      => 'https://analytics.example.com',
+            'url' => 'https://analytics.example.com',
             'apiToken' => 'tok123',
-            'siteId'   => 42,
+            'siteId' => 42,
         ]);
 
         $this->assertSame('https://analytics.example.com', $credentials->url);
@@ -34,9 +34,9 @@ class MatomoCredentialsTest extends TestCase
         $credentials = new MatomoCredentials('https://x.com', 'tok', 7);
 
         $this->assertSame([
-            'url'      => 'https://x.com',
+            'url' => 'https://x.com',
             'apiToken' => 'tok',
-            'siteId'   => 7,
+            'siteId' => 7,
         ], $credentials->toArray());
     }
 

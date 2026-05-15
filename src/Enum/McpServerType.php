@@ -10,28 +10,28 @@ enum McpServerType: string
 
     public function label(): string
     {
-        return match($this) {
-            self::Castopod            => 'Castopod',
+        return match ($this) {
+            self::Castopod => 'Castopod',
             self::GoogleSearchConsole => 'Google Search Console',
-            self::Matomo              => 'Matomo',
+            self::Matomo => 'Matomo',
         };
     }
 
     public function descriptionKey(): string
     {
-        return match($this) {
-            self::Castopod            => 'mcp_type.castopod.description',
+        return match ($this) {
+            self::Castopod => 'mcp_type.castopod.description',
             self::GoogleSearchConsole => 'mcp_type.google_search_console.description',
-            self::Matomo              => 'mcp_type.matomo.description',
+            self::Matomo => 'mcp_type.matomo.description',
         };
     }
 
     public function icon(): string
     {
-        return match($this) {
-            self::Castopod            => 'castopod.svg',
+        return match ($this) {
+            self::Castopod => 'castopod.svg',
             self::GoogleSearchConsole => 'googlesearchconsole.svg',
-            self::Matomo              => 'matomo.svg',
+            self::Matomo => 'matomo.svg',
         };
     }
 }

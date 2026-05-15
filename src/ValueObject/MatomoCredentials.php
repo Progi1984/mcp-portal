@@ -8,7 +8,8 @@ class MatomoCredentials
         public readonly string $url,
         public readonly string $apiToken,
         public readonly int $siteId,
-    ) {}
+    ) {
+    }
 
     public static function fromArray(array $data): self
     {

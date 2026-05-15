@@ -40,7 +40,7 @@ class McpEndpointController extends AbstractController
     #[Route('/{token}', name: 'app_mcp_endpoint', methods: ['POST'])]
     public function handle(string $token, Request $request): JsonResponse
     {
-        $limiter = $this->mcpEndpointLimiter->create($request->getClientIp() . ':' . $token);
+        $limiter = $this->mcpEndpointLimiter->create($request->getClientIp().':'.$token);
         if (!$limiter->consume()->isAccepted()) {
             return $this->jsonRpcError(null, -32029, 'Too many requests.', Response::HTTP_TOO_MANY_REQUESTS);
         }
@@ -52,7 +52,7 @@ class McpEndpointController extends AbstractController
         }
 
         $authHeader = $request->headers->get('Authorization');
-        if (!hash_equals('Bearer ' . $server->getClientSecret(), (string) $authHeader)) {
+        if (!hash_equals('Bearer '.$server->getClientSecret(), (string) $authHeader)) {
             return $this->jsonRpcError(null, -32001, 'Invalid token.', Response::HTTP_UNAUTHORIZED);
         }
 
@@ -66,11 +66,11 @@ class McpEndpointController extends AbstractController
             return $this->jsonRpcError(null, -32600, 'Invalid JSON-RPC request.');
         }
 
-        if ($body['jsonrpc'] !== '2.0') {
+        if ('2.0' !== $body['jsonrpc']) {
             return $this->jsonRpcError($body['id'] ?? null, -32600, 'Invalid JSON-RPC version.');
         }
 
-        $id     = $body['id'] ?? null;
+        $id = $body['id'] ?? null;
         $method = $body['method'];
         $params = $body['params'] ?? [];
 
@@ -78,7 +78,7 @@ class McpEndpointController extends AbstractController
             $rawCredentials = $this->encryptor->decrypt($server->getEncryptedCredentials());
         } catch (\RuntimeException $e) {
             $this->logger->error('Credential decryption failed for MCP server {id}.', [
-                'id'        => $server->getId(),
+                'id' => $server->getId(),
                 'exception' => $e,
             ]);
 
@@ -91,7 +91,7 @@ class McpEndpointController extends AbstractController
             'initialize' => $this->handleInitialize($id, $server->getName()),
             'tools/list' => $this->handleToolsList($id, $mcpServer, $rawCredentials),
             'tools/call' => $this->handleToolsCall($id, $params, $rawCredentials, $mcpServer),
-            default      => $this->jsonRpcError($id, -32601, "Unknown method: {$method}"),
+            default => $this->jsonRpcError($id, -32601, "Unknown method: {$method}"),
         };
     }
 
@@ -105,8 +105,8 @@ class McpEndpointController extends AbstractController
     {
         return $this->jsonRpcResult($id, [
             'protocolVersion' => self::PROTOCOL_VERSION,
-            'capabilities'    => ['tools' => []],
-            'serverInfo'      => ['name' => $serverName, 'version' => $this->appVersion],
+            'capabilities' => ['tools' => []],
+            'serverInfo' => ['name' => $serverName, 'version' => $this->appVersion],
         ]);
     }
 
@@ -117,7 +117,7 @@ class McpEndpointController extends AbstractController
 
     private function handleToolsCall(mixed $id, array $params, array $rawCredentials, McpServerInterface $mcpServer): JsonResponse
     {
-        $toolName  = $params['name'] ?? null;
+        $toolName = $params['name'] ?? null;
         $arguments = $params['arguments'] ?? [];
 
         if (!$toolName) {

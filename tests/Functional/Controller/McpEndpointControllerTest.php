@@ -25,30 +25,30 @@ class McpEndpointControllerTest extends WebTestCase
 
         // createClient() must be called first - it boots the kernel
         $this->client = static::createClient();
-        $container    = static::getContainer();
-        $this->em     = $container->get('doctrine.orm.entity_manager');
+        $container = static::getContainer();
+        $this->em = $container->get('doctrine.orm.entity_manager');
 
         $schemaTool = new SchemaTool($this->em);
-        $metadata   = $this->em->getMetadataFactory()->getAllMetadata();
+        $metadata = $this->em->getMetadataFactory()->getAllMetadata();
         $schemaTool->dropSchema($metadata);
         $schemaTool->createSchema($metadata);
 
         /** @var CredentialsEncryptor $encryptor */
         $encryptor = $container->get(CredentialsEncryptor::class);
 
-        $user    = (new User())->setEmail('test@example.com')->setPassword('x');
+        $user = (new User())->setEmail('test@example.com')->setPassword('x');
         $project = (new Project())->setName('Test Project')->setUser($user);
-        $server  = (new McpServer())
+        $server = (new McpServer())
             ->setName('Test Matomo')
             ->setType(McpServerType::Matomo)
             ->setProject($project)
             ->setEncryptedCredentials($encryptor->encrypt([
-                'url'      => 'https://matomo.example.com',
+                'url' => 'https://matomo.example.com',
                 'apiToken' => 'test-token',
-                'siteId'   => 1,
+                'siteId' => 1,
             ]));
 
-        $this->accessToken  = $server->getAccessToken();
+        $this->accessToken = $server->getAccessToken();
         $this->clientSecret = $server->getClientSecret();
 
         $this->em->persist($user);
@@ -82,7 +82,7 @@ class McpEndpointControllerTest extends WebTestCase
     public function testMissingAuthorizationHeaderReturns401(): void
     {
         $this->post(
-            '/api/mcp/' . $this->accessToken,
+            '/api/mcp/'.$this->accessToken,
             '{"jsonrpc":"2.0","method":"initialize","id":1}',
         );
 
@@ -92,7 +92,7 @@ class McpEndpointControllerTest extends WebTestCase
     public function testWrongBearerReturns401(): void
     {
         $this->post(
-            '/api/mcp/' . $this->accessToken,
+            '/api/mcp/'.$this->accessToken,
             '{"jsonrpc":"2.0","method":"initialize","id":1}',
             ['HTTP_AUTHORIZATION' => 'Bearer wrong-secret'],
         );
@@ -103,9 +103,9 @@ class McpEndpointControllerTest extends WebTestCase
     public function testMalformedJsonReturnsParseError(): void
     {
         $this->post(
-            '/api/mcp/' . $this->accessToken,
+            '/api/mcp/'.$this->accessToken,
             'not-valid-json',
-            ['HTTP_AUTHORIZATION' => 'Bearer ' . $this->clientSecret],
+            ['HTTP_AUTHORIZATION' => 'Bearer '.$this->clientSecret],
         );
 
         $data = json_decode($this->client->getResponse()->getContent(), true);
@@ -115,9 +115,9 @@ class McpEndpointControllerTest extends WebTestCase
     public function testInitializeReturnsServerInfo(): void
     {
         $this->post(
-            '/api/mcp/' . $this->accessToken,
+            '/api/mcp/'.$this->accessToken,
             '{"jsonrpc":"2.0","method":"initialize","id":1}',
-            ['HTTP_AUTHORIZATION' => 'Bearer ' . $this->clientSecret],
+            ['HTTP_AUTHORIZATION' => 'Bearer '.$this->clientSecret],
         );
 
         $this->assertResponseIsSuccessful();

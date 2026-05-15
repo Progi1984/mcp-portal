@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Project;
+use App\Entity\User;
 use App\Form\ProjectType;
 use App\Repository\McpServerRepository;
 use App\Repository\ProjectRepository;
@@ -23,7 +24,7 @@ class ProjectController extends AbstractController
     public function index(ProjectRepository $projectRepository): Response
     {
         return $this->render('project/index.html.twig', [
-            'projects' => $projectRepository->findByUser($this->getUser()),
+            'projects' => $projectRepository->findByUser($this->getAuthenticatedUser()),
         ]);
     }
 
@@ -46,7 +47,7 @@ class ProjectController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $project->setUser($this->getUser());
+            $project->setUser($this->getAuthenticatedUser());
             $em->persist($project);
             $em->flush();
 
@@ -77,6 +78,16 @@ class ProjectController extends AbstractController
             'project' => $project,
             'form' => $form,
         ]);
+    }
+
+    private function getAuthenticatedUser(): User
+    {
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw new \LogicException('User must be authenticated.');
+        }
+
+        return $user;
     }
 
     #[Route('/{id}/delete', name: 'app_project_delete', methods: ['POST'], requirements: ['id' => self::UUID])]

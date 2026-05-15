@@ -8,12 +8,14 @@ class CspNonceProvider
 {
     private const ATTR = '_csp_nonce';
 
-    public function __construct(private readonly RequestStack $requestStack) {}
+    public function __construct(private readonly RequestStack $requestStack)
+    {
+    }
 
     public function getNonce(): string
     {
         $request = $this->requestStack->getCurrentRequest();
-        if ($request === null) {
+        if (null === $request) {
             return '';
         }
         if (!$request->attributes->has(self::ATTR)) {

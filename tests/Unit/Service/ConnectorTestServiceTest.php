@@ -11,21 +11,22 @@ use App\ValueObject\CastopodCredentials;
 use App\ValueObject\GoogleSearchConsoleCredentials;
 use App\ValueObject\MatomoCredentials;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ConnectorTestServiceTest extends TestCase
 {
     private ConnectorTestService $service;
-    private CastopodClient $castopod;
-    private GoogleSearchConsoleClient $gsc;
-    private MatomoClient $matomo;
+    private CastopodClient&MockObject $castopod;
+    private GoogleSearchConsoleClient&MockObject $gsc;
+    private MatomoClient&MockObject $matomo;
 
     protected function setUp(): void
     {
         $this->castopod = $this->createMock(CastopodClient::class);
-        $this->gsc      = $this->createMock(GoogleSearchConsoleClient::class);
-        $this->matomo   = $this->createMock(MatomoClient::class);
-        $this->service  = new ConnectorTestService($this->castopod, $this->gsc, $this->matomo);
+        $this->gsc = $this->createMock(GoogleSearchConsoleClient::class);
+        $this->matomo = $this->createMock(MatomoClient::class);
+        $this->service = new ConnectorTestService($this->castopod, $this->gsc, $this->matomo);
     }
 
     // ── Matomo ────────────────────────────────────────────────────────────────
@@ -40,9 +41,9 @@ class ConnectorTestServiceTest extends TestCase
 
     public static function matomoMissingParamsProvider(): iterable
     {
-        yield 'missing url'      => [['apiToken' => 'tok', 'siteId' => 1]];
+        yield 'missing url' => [['apiToken' => 'tok', 'siteId' => 1]];
         yield 'missing apiToken' => [['url' => 'https://x.com', 'siteId' => 1]];
-        yield 'missing siteId'   => [['url' => 'https://x.com', 'apiToken' => 'tok']];
+        yield 'missing siteId' => [['url' => 'https://x.com', 'apiToken' => 'tok']];
     }
 
     public function testMatomoCallsClientAndReturnsResult(): void
@@ -51,10 +52,10 @@ class ConnectorTestServiceTest extends TestCase
         $this->matomo
             ->expects($this->once())
             ->method('testConnection')
-            ->with($this->callback(fn($c) => $c instanceof MatomoCredentials
-                && $c->url === 'https://x.com'
-                && $c->apiToken === 'tok'
-                && $c->siteId === 1))
+            ->with($this->callback(fn ($c) => $c instanceof MatomoCredentials
+                && 'https://x.com' === $c->url
+                && 'tok' === $c->apiToken
+                && 1 === $c->siteId))
             ->willReturn($expected);
 
         $result = $this->service->test(McpServerType::Matomo, [
@@ -76,7 +77,7 @@ class ConnectorTestServiceTest extends TestCase
 
     public static function castopodMissingParamsProvider(): iterable
     {
-        yield 'missing url'      => [['username' => 'u', 'password' => 'p']];
+        yield 'missing url' => [['username' => 'u', 'password' => 'p']];
         yield 'missing username' => [['url' => 'https://x.com', 'password' => 'p']];
         yield 'missing password' => [['url' => 'https://x.com', 'username' => 'u']];
     }
@@ -87,9 +88,9 @@ class ConnectorTestServiceTest extends TestCase
         $this->castopod
             ->expects($this->once())
             ->method('testConnection')
-            ->with($this->callback(fn($c) => $c instanceof CastopodCredentials
-                && $c->url === 'https://pod.com'
-                && $c->username === 'admin'))
+            ->with($this->callback(fn ($c) => $c instanceof CastopodCredentials
+                && 'https://pod.com' === $c->url
+                && 'admin' === $c->username))
             ->willReturn($expected);
 
         $result = $this->service->test(McpServerType::Castopod, [
@@ -112,7 +113,7 @@ class ConnectorTestServiceTest extends TestCase
     public static function gscMissingParamsProvider(): iterable
     {
         yield 'missing serviceAccountJson' => [['siteUrl' => 'https://x.com']];
-        yield 'missing siteUrl'            => [['serviceAccountJson' => '{}']];
+        yield 'missing siteUrl' => [['serviceAccountJson' => '{}']];
     }
 
     public function testGscCallsClientAndReturnsResult(): void
@@ -121,9 +122,9 @@ class ConnectorTestServiceTest extends TestCase
         $this->gsc
             ->expects($this->once())
             ->method('testConnection')
-            ->with($this->callback(fn($c) => $c instanceof GoogleSearchConsoleCredentials
-                && $c->siteUrl === 'https://x.com'
-                && $c->serviceAccountJson === '{}'))
+            ->with($this->callback(fn ($c) => $c instanceof GoogleSearchConsoleCredentials
+                && 'https://x.com' === $c->siteUrl
+                && '{}' === $c->serviceAccountJson))
             ->willReturn($expected);
 
         $result = $this->service->test(McpServerType::GoogleSearchConsole, [

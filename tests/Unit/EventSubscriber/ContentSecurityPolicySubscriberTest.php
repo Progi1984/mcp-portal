@@ -26,7 +26,7 @@ class ContentSecurityPolicySubscriberTest extends TestCase
     public function testSkipsSubRequests(): void
     {
         $subscriber = new ContentSecurityPolicySubscriber(new CspNonceProvider(new RequestStack()));
-        $response   = new Response();
+        $response = new Response();
 
         $subscriber->onKernelResponse($this->makeEvent(
             Request::create('/'),
@@ -40,7 +40,7 @@ class ContentSecurityPolicySubscriberTest extends TestCase
     public function testSkipsSymfonyProfilerRoutes(): void
     {
         $subscriber = new ContentSecurityPolicySubscriber(new CspNonceProvider(new RequestStack()));
-        $response   = new Response();
+        $response = new Response();
 
         $subscriber->onKernelResponse($this->makeEvent(Request::create('/_profiler/abc123'), $response));
 
@@ -49,13 +49,13 @@ class ContentSecurityPolicySubscriberTest extends TestCase
 
     public function testSetsCspHeaderForNormalRequests(): void
     {
-        $stack   = new RequestStack();
+        $stack = new RequestStack();
         $request = Request::create('/some/page');
         $stack->push($request);
 
-        $provider   = new CspNonceProvider($stack);
+        $provider = new CspNonceProvider($stack);
         $subscriber = new ContentSecurityPolicySubscriber($provider);
-        $response   = new Response();
+        $response = new Response();
 
         $subscriber->onKernelResponse($this->makeEvent($request, $response));
 
@@ -70,7 +70,7 @@ class ContentSecurityPolicySubscriberTest extends TestCase
     public function testCspHeaderNotSetForWildcardProfilerPath(): void
     {
         $subscriber = new ContentSecurityPolicySubscriber(new CspNonceProvider(new RequestStack()));
-        $response   = new Response();
+        $response = new Response();
 
         $subscriber->onKernelResponse($this->makeEvent(Request::create('/_wdt/abc'), $response));
 

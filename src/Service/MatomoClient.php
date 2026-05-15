@@ -7,7 +7,9 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class MatomoClient
 {
-    public function __construct(private readonly HttpClientInterface $httpClient) {}
+    public function __construct(private readonly HttpClientInterface $httpClient)
+    {
+    }
 
     public function testConnection(MatomoCredentials $credentials): array
     {
@@ -16,7 +18,7 @@ class MatomoClient
                 'idSite' => $credentials->siteId,
             ]);
 
-            if (isset($data['result']) && $data['result'] === 'error') {
+            if (isset($data['result']) && 'error' === $data['result']) {
                 return ['success' => false, 'message' => $data['message'] ?? 'Matomo error'];
             }
 
@@ -34,7 +36,7 @@ class MatomoClient
     {
         return $this->call($credentials, 'VisitsSummary.get', [
             'period' => $period,
-            'date'   => $period === 'range' ? "{$startDate},{$endDate}" : $startDate,
+            'date' => 'range' === $period ? "{$startDate},{$endDate}" : $startDate,
         ]);
     }
 
@@ -50,8 +52,8 @@ class MatomoClient
     public function getTopPages(MatomoCredentials $credentials, string $startDate, string $endDate, int $limit = 10): array
     {
         return $this->call($credentials, 'Actions.getPageUrls', [
-            'period'       => 'range',
-            'date'         => "{$startDate},{$endDate}",
+            'period' => 'range',
+            'date' => "{$startDate},{$endDate}",
             'filter_limit' => $limit,
         ]);
     }
@@ -59,8 +61,8 @@ class MatomoClient
     public function getEntryPages(MatomoCredentials $credentials, string $startDate, string $endDate, int $limit = 10): array
     {
         return $this->call($credentials, 'Actions.getEntryPageUrls', [
-            'period'       => 'range',
-            'date'         => "{$startDate},{$endDate}",
+            'period' => 'range',
+            'date' => "{$startDate},{$endDate}",
             'filter_limit' => $limit,
         ]);
     }
@@ -68,8 +70,8 @@ class MatomoClient
     public function getExitPages(MatomoCredentials $credentials, string $startDate, string $endDate, int $limit = 10): array
     {
         return $this->call($credentials, 'Actions.getExitPageUrls', [
-            'period'       => 'range',
-            'date'         => "{$startDate},{$endDate}",
+            'period' => 'range',
+            'date' => "{$startDate},{$endDate}",
             'filter_limit' => $limit,
         ]);
     }
@@ -77,12 +79,12 @@ class MatomoClient
     public function getPageLoadTimes(MatomoCredentials $credentials, string $startDate, string $endDate, int $limit = 20): array
     {
         return $this->call($credentials, 'Actions.getPageUrls', [
-            'period'                  => 'range',
-            'date'                    => "{$startDate},{$endDate}",
-            'filter_limit'            => $limit,
-            'filter_sort_column'      => 'avg_time_generation',
-            'filter_sort_order'       => 'desc',
-            'hideColumns'             => 'logo',
+            'period' => 'range',
+            'date' => "{$startDate},{$endDate}",
+            'filter_limit' => $limit,
+            'filter_sort_column' => 'avg_time_generation',
+            'filter_sort_order' => 'desc',
+            'hideColumns' => 'logo',
         ]);
     }
 
@@ -92,15 +94,15 @@ class MatomoClient
     {
         return $this->call($credentials, 'Referrers.get', [
             'period' => 'range',
-            'date'   => "{$startDate},{$endDate}",
+            'date' => "{$startDate},{$endDate}",
         ]);
     }
 
     public function getSearchKeywords(MatomoCredentials $credentials, string $startDate, string $endDate, int $limit = 20): array
     {
         return $this->call($credentials, 'Referrers.getKeywords', [
-            'period'       => 'range',
-            'date'         => "{$startDate},{$endDate}",
+            'period' => 'range',
+            'date' => "{$startDate},{$endDate}",
             'filter_limit' => $limit,
         ]);
     }
@@ -109,7 +111,7 @@ class MatomoClient
     {
         return $this->call($credentials, 'Referrers.getSearchEngines', [
             'period' => 'range',
-            'date'   => "{$startDate},{$endDate}",
+            'date' => "{$startDate},{$endDate}",
         ]);
     }
 
@@ -118,8 +120,8 @@ class MatomoClient
     public function getSiteSearch(MatomoCredentials $credentials, string $startDate, string $endDate, int $limit = 20): array
     {
         return $this->call($credentials, 'Actions.getSiteSearchKeywords', [
-            'period'       => 'range',
-            'date'         => "{$startDate},{$endDate}",
+            'period' => 'range',
+            'date' => "{$startDate},{$endDate}",
             'filter_limit' => $limit,
         ]);
     }
@@ -127,8 +129,8 @@ class MatomoClient
     public function getOutlinks(MatomoCredentials $credentials, string $startDate, string $endDate, int $limit = 20): array
     {
         return $this->call($credentials, 'Actions.getOutlinks', [
-            'period'       => 'range',
-            'date'         => "{$startDate},{$endDate}",
+            'period' => 'range',
+            'date' => "{$startDate},{$endDate}",
             'filter_limit' => $limit,
         ]);
     }
@@ -143,11 +145,11 @@ class MatomoClient
         // Some Matomo instances reject the token as a query string parameter.
         $response = $this->httpClient->request('POST', $url, [
             'body' => array_merge([
-                'module'     => 'API',
-                'method'     => $method,
-                'idSite'     => $credentials->siteId,
+                'module' => 'API',
+                'method' => $method,
+                'idSite' => $credentials->siteId,
                 'token_auth' => $credentials->apiToken,
-                'format'     => 'JSON',
+                'format' => 'JSON',
             ], $params),
             'timeout' => 10,
         ]);

@@ -25,12 +25,12 @@ class ConnectorTestControllerTest extends WebTestCase
     {
         parent::setUp();
 
-        $this->client    = static::createClient();
-        $container       = static::getContainer();
-        $this->em        = $container->get('doctrine.orm.entity_manager');
+        $this->client = static::createClient();
+        $container = static::getContainer();
+        $this->em = $container->get('doctrine.orm.entity_manager');
 
         $schemaTool = new SchemaTool($this->em);
-        $metadata   = $this->em->getMetadataFactory()->getAllMetadata();
+        $metadata = $this->em->getMetadataFactory()->getAllMetadata();
         $schemaTool->dropSchema($metadata);
         $schemaTool->createSchema($metadata);
 
@@ -47,9 +47,9 @@ class ConnectorTestControllerTest extends WebTestCase
             ->setType(McpServerType::Matomo)
             ->setProject($project)
             ->setEncryptedCredentials($encryptor->encrypt([
-                'url'      => 'https://matomo.example.com',
+                'url' => 'https://matomo.example.com',
                 'apiToken' => 'token',
-                'siteId'   => 1,
+                'siteId' => 1,
             ]));
 
         $this->corruptedServer = (new McpServer())
@@ -114,14 +114,14 @@ class ConnectorTestControllerTest extends WebTestCase
 
     public function testServerRequiresAuthentication(): void
     {
-        $this->client->request('GET', '/api/matomo/test/' . $this->server->getId());
+        $this->client->request('GET', '/api/matomo/test/'.$this->server->getId());
         $this->assertResponseStatusCodeSame(302);
     }
 
     public function testServerReturnsForbiddenIfNotOwner(): void
     {
         $this->client->loginUser($this->otherUser);
-        $this->client->request('GET', '/api/matomo/test/' . $this->server->getId());
+        $this->client->request('GET', '/api/matomo/test/'.$this->server->getId());
 
         $this->assertResponseStatusCodeSame(403);
         $data = json_decode($this->client->getResponse()->getContent(), true);
@@ -131,7 +131,7 @@ class ConnectorTestControllerTest extends WebTestCase
     public function testServerReturnsUnprocessableIfDecryptionFails(): void
     {
         $this->client->loginUser($this->ownerUser);
-        $this->client->request('GET', '/api/matomo/test/' . $this->corruptedServer->getId());
+        $this->client->request('GET', '/api/matomo/test/'.$this->corruptedServer->getId());
 
         $this->assertResponseStatusCodeSame(422);
         $data = json_decode($this->client->getResponse()->getContent(), true);

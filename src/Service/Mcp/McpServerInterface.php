@@ -11,8 +11,8 @@ interface McpServerInterface
     public function getSupportedType(): McpServerType;
 
     /**
-     * @param array<string, mixed> $rawCredentials Credentials déchiffrés - permet d'adapter
-     *                                              la liste d'outils aux capacités configurées.
+     * @param array<string, mixed> $rawCredentials credentials déchiffrés - permet d'adapter
+     *                                             la liste d'outils aux capacités configurées
      */
     public function getToolDefinitions(array $rawCredentials = []): array;
 

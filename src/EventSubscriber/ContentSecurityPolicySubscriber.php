@@ -11,7 +11,9 @@ class ContentSecurityPolicySubscriber implements EventSubscriberInterface
 {
     private const CDN = 'https://cdn.jsdelivr.net';
 
-    public function __construct(private readonly CspNonceProvider $nonceProvider) {}
+    public function __construct(private readonly CspNonceProvider $nonceProvider)
+    {
+    }
 
     public static function getSubscribedEvents(): array
     {
@@ -33,11 +35,11 @@ class ContentSecurityPolicySubscriber implements EventSubscriberInterface
 
         $csp = implode('; ', [
             "default-src 'self'",
-            "script-src 'self' " . self::CDN . " 'nonce-{$nonce}'",
+            "script-src 'self' ".self::CDN." 'nonce-{$nonce}'",
             // jsDelivr CDN for Bootstrap & Bootstrap Icons CSS
-            "style-src 'self' " . self::CDN . " 'unsafe-inline'",
+            "style-src 'self' ".self::CDN." 'unsafe-inline'",
             // Bootstrap Icons web font
-            "font-src 'self' " . self::CDN,
+            "font-src 'self' ".self::CDN,
             // fetch() calls to /api/* routes
             "connect-src 'self'",
             // SVG data URI used for the favicon

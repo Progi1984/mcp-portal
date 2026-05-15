@@ -1,0 +1,22 @@
+includes:
+    - vendor/phpstan/phpstan-symfony/extension.neon     # https://github.com/phpstan/phpstan-symfony
+    - vendor/phpstan/phpstan-doctrine/extension.neon    # https://github.com/phpstan/phpstan-doctrine
+    - vendor/phpstan/phpstan-doctrine/rules.neon
+
+parameters:
+    # https://phpstan.org/config-reference#rule-level
+    level: 5
+
+    # https://phpstan.org/config-reference#analysed-files
+    paths:
+        - config
+        - migrations
+        - src
+        - tests
+        - public
+
+    excludePaths:
+        - config/reference.php
+
+    doctrine:
+        objectManagerLoader: tests/_phpstan/phpstan_doctrine_autoload.php

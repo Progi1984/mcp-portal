@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'project.new.title'|trans }} - MCP Portal{% endblock %}
+
+{% block body %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="d-flex align-items-center mb-4">
+            <a href="{{ path('app_project_index') }}" class="btn btn-outline-secondary btn-sm me-3">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <h2 class="mb-0">{{ 'project.new.title'|trans }}</h2>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                {{ form_start(form) }}
+                <div class="mb-4">
+                    {{ form_label(form.name) }}
+                    {{ form_widget(form.name) }}
+                    {{ form_errors(form.name) }}
+                    <div class="form-text">{{ 'project.new.uuid_hint'|trans }}</div>
+                </div>
+                <button type="submit" class="btn btn-dark w-100">
+                    <i class="bi bi-folder-plus me-1"></i>{{ 'project.new.submit'|trans }}
+                </button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

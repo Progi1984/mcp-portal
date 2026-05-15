@@ -1,0 +1,259 @@
+{{ form_start(form) }}
+
+<div class="mb-3">
+    {{ form_label(form.name) }}
+    {{ form_widget(form.name) }}
+    {{ form_errors(form.name) }}
+</div>
+
+{# ── Matomo ──────────────────────────────────────────────────────────────── #}
+{% if server_type.value == 'matomo' %}
+
+<hr class="my-4">
+<h6 class="text-muted text-uppercase fw-semibold mb-3">
+    <i class="bi bi-gear me-1"></i>{{ 'form.mcp.matomo.section_title'|trans }}
+</h6>
+
+<div class="mb-3">
+    {{ form_label(form.matomoUrl) }}
+    {{ form_widget(form.matomoUrl) }}
+    {{ form_errors(form.matomoUrl) }}
+</div>
+
+<div class="row g-3 mb-3">
+    <div class="col-md-8">
+        {{ form_label(form.matomoApiToken) }}
+        {{ form_widget(form.matomoApiToken) }}
+        {{ form_errors(form.matomoApiToken) }}
+    </div>
+    <div class="col-md-4">
+        {{ form_label(form.matomoSiteId) }}
+        {{ form_widget(form.matomoSiteId) }}
+        {{ form_errors(form.matomoSiteId) }}
+    </div>
+</div>
+
+<div class="mb-4">
+    <button type="button" class="btn btn-outline-secondary btn-sm" id="btn-test-matomo">
+        <i class="bi bi-wifi me-1"></i>{{ 'action.test_connection'|trans }}
+    </button>
+    <span id="test-matomo-result" class="ms-2"></span>
+</div>
+
+{# ── Google Search Console ───────────────────────────────────────────────── #}
+{% elseif server_type.value == 'google_search_console' %}
+
+<hr class="my-4">
+<h6 class="text-muted text-uppercase fw-semibold mb-3">
+    <i class="bi bi-gear me-1"></i>{{ 'form.mcp.gsc.section_title'|trans }}
+</h6>
+
+<div class="mb-3">
+    {{ form_label(form.gscSiteUrl) }}
+    {{ form_widget(form.gscSiteUrl) }}
+    {{ form_errors(form.gscSiteUrl) }}
+    <div class="form-text">
+        {{ 'form.mcp.gsc.site_url_hint'|trans|raw }}
+    </div>
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.gscServiceAccountJson) }}
+    {{ form_widget(form.gscServiceAccountJson) }}
+    {{ form_errors(form.gscServiceAccountJson) }}
+    <div class="form-text">
+        {{ 'form.mcp.gsc.service_account_hint'|trans|raw }}
+    </div>
+</div>
+
+<div class="mb-4">
+    <button type="button" class="btn btn-outline-secondary btn-sm" id="btn-test-gsc">
+        <i class="bi bi-wifi me-1"></i>{{ 'action.test_connection'|trans }}
+    </button>
+    <span id="test-gsc-result" class="ms-2"></span>
+</div>
+
+{# ── Castopod ────────────────────────────────────────────────────────────── #}
+{% elseif server_type.value == 'castopod' %}
+
+<hr class="my-4">
+<h6 class="text-muted text-uppercase fw-semibold mb-3">
+    <i class="bi bi-gear me-1"></i>{{ 'form.mcp.castopod.section_title'|trans }}
+</h6>
+
+<div class="mb-3">
+    {{ form_label(form.castopodUrl) }}
+    {{ form_widget(form.castopodUrl) }}
+    {{ form_errors(form.castopodUrl) }}
+</div>
+
+<div class="row g-3 mb-3">
+    <div class="col-md-6">
+        {{ form_label(form.castopodUsername) }}
+        {{ form_widget(form.castopodUsername) }}
+        {{ form_errors(form.castopodUsername) }}
+    </div>
+    <div class="col-md-6">
+        {{ form_label(form.castopodPassword) }}
+        {{ form_widget(form.castopodPassword) }}
+        {{ form_errors(form.castopodPassword) }}
+    </div>
+</div>
+
+<div class="mb-4">
+    <button type="button" class="btn btn-outline-secondary btn-sm" id="btn-test-castopod">
+        <i class="bi bi-wifi me-1"></i>{{ 'action.test_connection'|trans }}
+    </button>
+    <span id="test-castopod-result" class="ms-2"></span>
+</div>
+
+<hr class="my-3">
+<h6 class="text-muted small text-uppercase fw-semibold mb-1">
+    <i class="bi bi-bar-chart me-1"></i>{{ 'form.mcp.castopod.op3_section'|trans }}
+    <span class="badge bg-secondary fw-normal ms-1" style="font-size:.7rem">{{ 'locale.optional'|trans }}</span>
+</h6>
+<p class="text-muted small mb-3">
+    {{ 'form.mcp.castopod.op3_hint'|trans|raw }}
+</p>
+
+<div class="row g-3 mb-3">
+    <div class="col-md-6">
+        {{ form_label(form.castopodOp3ApiKey) }}
+        {{ form_widget(form.castopodOp3ApiKey) }}
+        {{ form_errors(form.castopodOp3ApiKey) }}
+    </div>
+    <div class="col-md-6">
+        {{ form_label(form.castopodOp3ShowUuid) }}
+        {{ form_widget(form.castopodOp3ShowUuid) }}
+        {{ form_errors(form.castopodOp3ShowUuid) }}
+    </div>
+</div>
+
+{% endif %}
+
+<button type="submit" class="btn btn-dark w-100">
+    <i class="bi bi-check-lg me-1"></i>{{ 'action.save'|trans }}
+</button>
+
+{{ form_end(form) }}
+
+{# ── Test connection scripts ──────────────────────────────────────────────── #}
+{% if server_type.value == 'matomo' %}
+<script nonce="{{ csp_nonce() }}">
+document.getElementById('btn-test-matomo').addEventListener('click', function () {
+    const btn      = this;
+    const resultEl = document.getElementById('test-matomo-result');
+
+    const url      = document.getElementById('{{ form.matomoUrl.vars.id }}').value;
+    const apiToken = document.getElementById('{{ form.matomoApiToken.vars.id }}').value;
+    const siteId   = document.getElementById('{{ form.matomoSiteId.vars.id }}').value;
+
+    if (!url || !apiToken || !siteId) {
+        resultEl.innerHTML = '<span class="text-danger small">{{ 'error.fill_connection_fields'|trans|e('js') }}</span>';
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>{{ 'action.testing'|trans|e('js') }}';
+    resultEl.innerHTML = '';
+
+    fetch('/api/{{ server_type.value }}/test', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ url, apiToken, siteId: parseInt(siteId) }),
+    })
+        .then(r => r.json())
+        .then(data => {
+            resultEl.innerHTML = data.success
+                ? '<span class="badge bg-success"><i class="bi bi-check-lg me-1"></i>' + data.message + '</span>'
+                : '<span class="badge bg-danger"><i class="bi bi-x-lg me-1"></i>' + data.message + '</span>';
+        })
+        .catch(() => {
+            resultEl.innerHTML = '<span class="badge bg-danger">{{ 'error.network'|trans|e('js') }}</span>';
+        })
+        .finally(() => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-wifi me-1"></i>{{ 'action.test_connection'|trans|e('js') }}';
+        });
+});
+</script>
+
+{% elseif server_type.value == 'castopod' %}
+<script nonce="{{ csp_nonce() }}">
+document.getElementById('btn-test-castopod').addEventListener('click', function () {
+    const btn      = this;
+    const resultEl = document.getElementById('test-castopod-result');
+
+    const url      = document.getElementById('{{ form.castopodUrl.vars.id }}').value;
+    const username = document.getElementById('{{ form.castopodUsername.vars.id }}').value;
+    const password = document.getElementById('{{ form.castopodPassword.vars.id }}').value;
+
+    if (!url || !username || !password) {
+        resultEl.innerHTML = '<span class="text-danger small">{{ 'error.fill_connection_fields'|trans|e('js') }}</span>';
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>{{ 'action.testing'|trans|e('js') }}';
+    resultEl.innerHTML = '';
+
+    fetch('/api/{{ server_type.value }}/test', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ url, username, password }),
+    })
+        .then(r => r.json())
+        .then(data => {
+            resultEl.innerHTML = data.success
+                ? '<span class="badge bg-success"><i class="bi bi-check-lg me-1"></i>' + data.message + '</span>'
+                : '<span class="badge bg-danger"><i class="bi bi-x-lg me-1"></i>' + data.message + '</span>';
+        })
+        .catch(() => {
+            resultEl.innerHTML = '<span class="badge bg-danger">{{ 'error.network'|trans|e('js') }}</span>';
+        })
+        .finally(() => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-wifi me-1"></i>{{ 'action.test_connection'|trans|e('js') }}';
+        });
+});
+</script>
+
+{% elseif server_type.value == 'google_search_console' %}
+<script nonce="{{ csp_nonce() }}">
+document.getElementById('btn-test-gsc').addEventListener('click', function () {
+    const btn      = this;
+    const resultEl = document.getElementById('test-gsc-result');
+
+    const siteUrl            = document.getElementById('{{ form.gscSiteUrl.vars.id }}').value;
+    const serviceAccountJson = document.getElementById('{{ form.gscServiceAccountJson.vars.id }}').value;
+
+    if (!siteUrl || !serviceAccountJson) {
+        resultEl.innerHTML = '<span class="text-danger small">{{ 'error.fill_connection_fields'|trans|e('js') }}</span>';
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>{{ 'action.testing'|trans|e('js') }}';
+    resultEl.innerHTML = '';
+
+    fetch('/api/{{ server_type.value }}/test', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ siteUrl, serviceAccountJson }),
+    })
+        .then(r => r.json())
+        .then(data => {
+            resultEl.innerHTML = data.success
+                ? '<span class="badge bg-success"><i class="bi bi-check-lg me-1"></i>' + data.message + '</span>'
+                : '<span class="badge bg-danger"><i class="bi bi-x-lg me-1"></i>' + data.message + '</span>';
+        })
+        .catch(() => {
+            resultEl.innerHTML = '<span class="badge bg-danger">{{ 'error.network'|trans|e('js') }}</span>';
+        })
+        .finally(() => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-wifi me-1"></i>{{ 'action.test_connection'|trans|e('js') }}';
+        });
+});
+</script>
+{% endif %}

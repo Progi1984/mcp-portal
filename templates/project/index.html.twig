@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'project.my_projects'|trans }} - MCP Portal{% endblock %}
+
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">{{ 'project.my_projects'|trans }}</h2>
+    <a href="{{ path('app_project_new') }}" class="btn btn-dark">
+        <i class="bi bi-plus-lg me-1"></i>{{ 'project.new.button'|trans }}
+    </a>
+</div>
+
+{% if projects is empty %}
+    <div class="text-center py-5 text-muted">
+        <i class="bi bi-folder2-open fs-1 d-block mb-3"></i>
+        <p class="mb-3">{{ 'home.no_projects'|trans }}</p>
+        <a href="{{ path('app_project_new') }}" class="btn btn-dark">
+            <i class="bi bi-plus-lg me-1"></i>{{ 'home.create_first_project'|trans }}
+        </a>
+    </div>
+{% else %}
+    <div class="row g-3">
+        {% for project in projects %}
+        {% set mcpCount = project.mcpServers|length %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <a href="{{ path('app_project_show', {id: project.id}) }}"
+                   class="card-body text-decoration-none text-dark d-block">
+                    <h5 class="card-title mb-1">{{ project.name }}</h5>
+                    <p class="text-muted small font-monospace mb-2">
+                        <i class="bi bi-key me-1"></i>{{ project.id }}
+                    </p>
+                    <span class="badge {{ mcpCount > 0 ? 'bg-dark' : 'bg-secondary' }}">
+                        <i class="bi bi-plug me-1"></i>
+                        {{ mcpCount }} {{ (mcpCount != 1 ? 'mcp.servers' : 'mcp.server')|trans }}
+                    </span>
+                </a>
+                <div class="card-footer bg-transparent border-top-0 d-flex gap-2">
+                    <a href="{{ path('app_project_show', {id: project.id}) }}" class="btn btn-sm btn-dark">
+                        <i class="bi bi-arrow-right me-1"></i>{{ 'action.open'|trans }}
+                    </a>
+                    <a href="{{ path('app_project_edit', {id: project.id}) }}" class="btn btn-sm btn-outline-dark">
+                        <i class="bi bi-pencil me-1"></i>{{ 'project.rename'|trans }}
+                    </a>
+                    <form method="post" action="{{ path('app_project_delete', {id: project.id}) }}"
+                          onsubmit="return confirm('{{ 'project.delete_confirm'|trans({'%name%': project.name})|e('js') }}')">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete-project-' ~ project.id) }}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                            <i class="bi bi-trash me-1"></i>{{ 'action.delete'|trans }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}

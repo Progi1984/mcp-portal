@@ -1,0 +1,99 @@
+nav.projects: Projects
+nav.logout: Logout
+home.greeting: 'Hello 👋'
+home.no_projects: 'You have no projects yet.'
+home.create_first_project: 'Create my first project'
+project.my_projects: 'My projects'
+project.new.title: 'New project'
+project.new.button: 'New project'
+project.new.uuid_hint: 'The UUID key will be generated automatically.'
+project.new.submit: 'Create project'
+project.edit.title: 'Edit project'
+project.uuid_label: 'Project key (UUID)'
+project.rename: Rename
+project.open: Open
+project.delete: Delete
+project.delete_confirm: 'Delete « %name% »?'
+mcp.server: 'MCP server'
+mcp.servers: 'MCP servers'
+mcp.servers_title: 'MCP Servers'
+mcp.connect_server: 'Connect a server'
+mcp.connect_server_btn: 'Connect an MCP server'
+mcp.no_servers: 'No MCP server connected to this project.'
+mcp.endpoint: 'MCP Endpoint'
+mcp.client_secret: 'Authorization secret (Bearer)'
+mcp.regenerate_secret_confirm: 'Regenerate the secret? All MCP clients will need to be updated.'
+mcp.new.title: 'New MCP server'
+mcp.new.connect_title: 'Connect an MCP server'
+mcp.new.select_type_hint: 'Choose the type of server to connect to this project.'
+mcp.edit.title: 'Edit MCP server'
+mcp.regenerate_confirm: 'Regenerate the token? The old endpoint will no longer work.'
+mcp.delete_confirm: 'Delete this MCP server?'
+action.test: Test
+action.test_connection: 'Test connection'
+action.testing: Testing…
+action.copy: Copy
+action.edit: Edit
+action.save: Save
+action.save_changes: 'Save changes'
+action.configure: Configure
+action.new_token: 'New token'
+action.new_secret: 'New secret'
+action.show_secret: 'Show / hide secret'
+action.open: Open
+action.rename: Rename
+action.delete: Delete
+error.network: 'Network error'
+error.fill_connection_fields: 'Please fill in the connection fields.'
+form.email: 'Email address'
+form.password: Password
+form.confirm_password: 'Confirm password'
+form.project.name: 'Project name'
+form.project.name_placeholder: 'My project'
+form.mcp.name: 'Server name'
+form.mcp.name_placeholder: 'My MCP server'
+form.mcp.matomo.section_title: 'Matomo Connection'
+form.mcp.matomo.url: 'Matomo server URL'
+form.mcp.matomo.api_token: 'API Token'
+form.mcp.matomo.site_id: 'Site ID'
+form.mcp.gsc.section_title: 'Google Search Console Connection'
+form.mcp.gsc.site_url: 'Property URL'
+form.mcp.gsc.service_account_json: 'Service account JSON key'
+form.mcp.gsc.site_url_hint: '<em>URL prefix</em> format: <code>https://example.com/</code> - <em>Domain</em> format: <code>sc-domain:example.com</code>'
+form.mcp.gsc.service_account_hint: 'Paste the content of your Google Cloud service account JSON file here (<em>Verified Owner</em> role on the GSC property).'
+form.mcp.castopod.section_title: 'Castopod Connection'
+form.mcp.castopod.url: 'Castopod instance URL'
+form.mcp.castopod.username: Username
+form.mcp.castopod.password: Password
+form.mcp.castopod.op3_section: 'OP3 Analytics'
+form.mcp.castopod.op3_api_key: 'OP3 API Key'
+form.mcp.castopod.op3_show_uuid: 'OP3 Show UUID'
+form.mcp.castopod.op3_hint: 'Enable <strong>OP3</strong> in the Castopod podcast admin, then enter your <a href="https://op3.dev/api/keys" target="_blank" rel="noopener">op3.dev API key</a> and the Show UUID (visible at <code>op3.dev/show/&lt;uuid&gt;</code>).'
+login.subtitle: 'Sign in to your account'
+login.remember_me: 'Remember me'
+login.submit: 'Sign in'
+login.no_account: "Don't have an account?"
+login.create_account: 'Create an account'
+register.title: 'Create an account'
+register.subtitle: 'Join MCP Portal'
+register.submit: 'Create my account'
+register.already_account: 'Already have an account?'
+register.login_link: 'Sign in'
+flash.project.created: 'Project created successfully.'
+flash.project.updated: 'Project updated successfully.'
+flash.project.deleted: 'Project deleted.'
+flash.mcp.created: 'MCP server created.'
+flash.mcp.updated: 'MCP server updated.'
+flash.mcp.token_regenerated: 'Token regenerated. Please update your MCP configuration.'
+flash.mcp.secret_regenerated: 'Secret regenerated. Please update your MCP clients.'
+flash.mcp.deleted: 'MCP server deleted.'
+flash.mcp.decrypt_error: 'Credential decryption failed. Please re-enter your credentials.'
+flash.register.success: 'Your account has been created. You can now sign in.'
+flash.locale.switched: 'Language updated.'
+mcp_type.matomo.description: 'Connect your Matomo instance to expose visit statistics, page views, traffic sources, and real-time data.'
+mcp_type.google_search_console.description: 'Connect a Google Search Console property via a service account to expose search performance, queries, and indexed pages.'
+mcp_type.castopod.description: 'Connect your Castopod instance to expose your podcasts and episodes - metadata, descriptions, chapters, and publication statuses.'
+locale.label: Language
+locale.optional: Optional
+locale.en: English
+locale.fr: Français

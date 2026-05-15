@@ -1,0 +1,17 @@
+validation:
+    name_required: "Le nom est obligatoire."
+    url_required: "L'URL est obligatoire."
+    url_invalid: URL invalide.
+    api_token_required: "Le token API est obligatoire."
+    site_id_required: "L'ID du site est obligatoire."
+    site_id_positive: "L'ID du site doit être un entier positif."
+    password_required: "Veuillez saisir un mot de passe."
+    password_min_length: "Le mot de passe doit contenir au moins {{ limit }} caractères."
+    passwords_mismatch: "Les mots de passe ne correspondent pas."
+    email_already_used: "Cet email est déjà utilisé."
+    gsc:
+        service_account_required: "La clé JSON du compte de service est obligatoire."
+        site_url_required: "L'URL de la propriété est obligatoire."
+    castopod:
+        username_required: "Le nom d'utilisateur est obligatoire."
+        password_required: "Le mot de passe est obligatoire."

@@ -1,0 +1,36 @@
+site_name: MCP Portal
+site_description: MCP Portal - technical documentation
+docs_dir: docs
+
+theme:
+  name: material
+  language: en
+  palette:
+    scheme: default
+    primary: black
+    accent: indigo
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - tables
+  - attr_list
+
+nav:
+  - Home: index.md
+  - Getting started: getting-started.md
+  - Connectors:
+    - Overview: connectors/index.md
+    - Matomo: connectors/matomo.md
+    - Google Search Console: connectors/google-search-console.md
+    - Castopod: connectors/castopod.md
+  - MCP Protocol: mcp-protocol.md

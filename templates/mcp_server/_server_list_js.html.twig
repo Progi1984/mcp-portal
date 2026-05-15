@@ -1,0 +1,61 @@
+<script nonce="{{ csp_nonce() }}">
+document.addEventListener('click', function (e) {
+    const copyBtn = e.target.closest('[data-copy]');
+    if (copyBtn) {
+        const input = document.getElementById(copyBtn.dataset.copy);
+        navigator.clipboard.writeText(input.value).then(() => {
+            copyBtn.innerHTML = '<i class="bi bi-check-lg"></i>';
+            setTimeout(() => copyBtn.innerHTML = '<i class="bi bi-clipboard"></i>', 2000);
+        });
+        return;
+    }
+
+    const toggleBtn = e.target.closest('[data-toggle-secret]');
+    if (toggleBtn) {
+        const input = document.getElementById(toggleBtn.dataset.toggleSecret);
+        const isHidden = input.type === 'password';
+        input.type = isHidden ? 'text' : 'password';
+        toggleBtn.innerHTML = isHidden ? '<i class="bi bi-eye-slash"></i>' : '<i class="bi bi-eye"></i>';
+        return;
+    }
+
+    const testBtn = e.target.closest('[data-test-server]');
+    if (testBtn) {
+        const serverId = testBtn.dataset.testServer;
+        const serverType = testBtn.dataset.serverType;
+        const resultEl = document.getElementById('test-result-' + serverId);
+        const testUrl = '/api/' + serverType + '/test/' + serverId;
+
+        testBtn.disabled = true;
+        testBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>{{ 'action.testing'|trans|e('js') }}';
+        resultEl.innerHTML = '';
+
+        fetch(testUrl)
+            .then(r => r.json())
+            .then(data => {
+                const badge = document.createElement('span');
+                badge.className = data.success ? 'badge bg-success' : 'badge bg-danger';
+                const icon = document.createElement('i');
+                icon.className = data.success ? 'bi bi-check-lg me-1' : 'bi bi-x-lg me-1';
+                badge.appendChild(icon);
+                badge.appendChild(document.createTextNode(data.message));
+                resultEl.replaceChildren(badge);
+            })
+            .catch(() => {
+                resultEl.innerHTML = '<span class="badge bg-danger">{{ 'error.network'|trans|e('js') }}</span>';
+            })
+            .finally(() => {
+                testBtn.disabled = false;
+                testBtn.innerHTML = '<i class="bi bi-wifi me-1"></i>{{ 'action.test'|trans|e('js') }}';
+            });
+        return;
+    }
+});
+
+document.addEventListener('submit', function (e) {
+    const form = e.target.closest('form[data-confirm]');
+    if (form && !confirm(form.dataset.confirm)) {
+        e.preventDefault();
+    }
+});
+</script>

@@ -1,0 +1,138 @@
+nav:
+    projects: Projets
+    logout: "Déconnexion"
+
+home:
+    greeting: "Bonjour \U0001F44B"
+    no_projects: "Vous n'avez aucun projet pour le moment."
+    create_first_project: "Créer mon premier projet"
+
+project:
+    my_projects: Mes projets
+    new:
+        title: Nouveau projet
+        button: Nouveau projet
+        uuid_hint: "La clé UUID sera générée automatiquement."
+        submit: "Créer le projet"
+    edit:
+        title: Modifier le projet
+    uuid_label: "Clé du projet (UUID)"
+    rename: Renommer
+    open: Ouvrir
+    delete: Supprimer
+    delete_confirm: "Supprimer « %name% » ?"
+
+mcp:
+    server: serveur MCP
+    servers: serveurs MCP
+    servers_title: Serveurs MCP
+    connect_server: Connecter un serveur
+    connect_server_btn: Connecter un serveur MCP
+    no_servers: "Aucun serveur MCP connecté à ce projet."
+    endpoint: Endpoint MCP
+    client_secret: "Secret d'autorisation (Bearer)"
+    regenerate_secret_confirm: "Régénérer le secret ? Tous les clients MCP devront être mis à jour."
+    new:
+        title: Nouveau serveur MCP
+        connect_title: Connecter un serveur MCP
+        select_type_hint: "Choisissez le type de serveur à connecter à ce projet."
+    edit:
+        title: Modifier le serveur MCP
+    regenerate_confirm: "Régénérer le token ? L'ancien endpoint ne fonctionnera plus."
+    delete_confirm: Supprimer ce serveur MCP ?
+
+action:
+    test: Tester
+    test_connection: Tester la connexion
+    testing: "Test en cours…"
+    copy: Copier
+    edit: Modifier
+    save: Enregistrer
+    save_changes: Enregistrer les modifications
+    configure: "Configurer"
+    new_token: Nouveau token
+    new_secret: Nouveau secret
+    show_secret: Afficher / masquer le secret
+    open: Ouvrir
+    rename: Renommer
+    delete: Supprimer
+
+error:
+    network: "Erreur réseau"
+    fill_connection_fields: "Remplissez les champs de connexion."
+
+form:
+    email: Adresse email
+    password: Mot de passe
+    confirm_password: Confirmer le mot de passe
+    project:
+        name: Nom du projet
+        name_placeholder: Mon projet
+    mcp:
+        name: Nom du serveur
+        name_placeholder: Mon serveur MCP
+        matomo:
+            section_title: Connexion Matomo
+            url: URL du serveur Matomo
+            api_token: Token API
+            site_id: ID du site
+        gsc:
+            section_title: Connexion Google Search Console
+            site_url: "URL de la propriété"
+            service_account_json: "Clé JSON du compte de service"
+            site_url_hint: "Format <em>URL prefix</em> : <code>https://example.com/</code> - Format <em>Domain</em> : <code>sc-domain:example.com</code>"
+            service_account_hint: "Collez ici le contenu du fichier JSON de votre compte de service Google Cloud (rôle <em>Propriétaire vérifiable</em> sur la propriété GSC)."
+        castopod:
+            section_title: Connexion Castopod
+            url: "URL de l'instance Castopod"
+            username: "Nom d'utilisateur"
+            password: Mot de passe
+            op3_section: Analytics OP3
+            op3_api_key: "Clé API OP3"
+            op3_show_uuid: Show UUID OP3
+            op3_hint: "Activez <strong>OP3</strong> dans l'admin Castopod du podcast, puis renseignez votre <a href=\"https://op3.dev/api/keys\" target=\"_blank\" rel=\"noopener\">clé API op3.dev</a> et le Show UUID (visible sur <code>op3.dev/show/&lt;uuid&gt;</code>)."
+
+login:
+    subtitle: "Connectez-vous à votre compte"
+    remember_me: Se souvenir de moi
+    submit: Se connecter
+    no_account: "Pas encore de compte ?"
+    create_account: "Créer un compte"
+
+register:
+    title: "Créer un compte"
+    subtitle: Rejoignez MCP Portal
+    submit: "Créer mon compte"
+    already_account: "Déjà un compte ?"
+    login_link: Se connecter
+
+flash:
+    project:
+        created: "Projet créé avec succès."
+        updated: "Projet modifié avec succès."
+        deleted: "Projet supprimé."
+    mcp:
+        created: "Serveur MCP créé."
+        updated: "Serveur MCP mis à jour."
+        token_regenerated: "Token régénéré. Mettez à jour votre configuration MCP."
+        secret_regenerated: "Secret régénéré. Mettez à jour vos clients MCP."
+        deleted: "Serveur MCP supprimé."
+        decrypt_error: "Échec du déchiffrement des identifiants. Veuillez ressaisir vos identifiants."
+    register:
+        success: "Votre compte a été créé. Vous pouvez maintenant vous connecter."
+    locale:
+        switched: "Langue mise à jour."
+
+mcp_type:
+    matomo:
+        description: "Connectez votre instance Matomo pour exposer les statistiques de visites, pages vues, sources de trafic et données temps réel."
+    google_search_console:
+        description: "Connectez une propriété Google Search Console via un compte de service pour exposer les performances de recherche, les requêtes et les pages indexées."
+    castopod:
+        description: "Connectez votre instance Castopod pour exposer vos podcasts et épisodes : métadonnées, descriptions, chapitres et statuts de publication."
+
+locale:
+    label: Langue
+    optional: Optionnel
+    en: English
+    fr: "Français"

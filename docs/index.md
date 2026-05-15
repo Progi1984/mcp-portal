@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="../public/images/logo.svg" alt="MCP Portal" width="80">
+  <img src="images/logo.svg" alt="MCP Portal" width="80">
 </p>
 
 # MCP Portal
@@ -38,7 +38,7 @@ Each **project** groups one or more **MCP servers**. Each server:
 ## Documentation setup
 
 ```bash
-pip install mkdocs-material
+pip install -r docs/requirements.txt
 mkdocs serve        # local documentation at http://127.0.0.1:8000
 mkdocs build        # generates the static site in site/
 ```

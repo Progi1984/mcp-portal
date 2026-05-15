@@ -6,9 +6,9 @@ A connector is the bridge between an MCP server and a third-party API. It declar
 
 | Connector | Authentication | Tools |
 |---|---|---|
-| [Matomo](matomo.md) | URL + API Token + Site ID | 11 |
-| [Google Search Console](google-search-console.md) | JSON service account (OAuth2) | 8 |
 | [Castopod](castopod.md) | URL + Basic Auth (username / password) | 4 (+ 3 with OP3) |
+| [Google Search Console](google-search-console.md) | JSON service account (OAuth2) | 8 |
+| [Matomo](matomo.md) | URL + API Token + Site ID | 11 |
 
 ## Adding a connector
 

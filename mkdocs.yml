@@ -1,10 +1,12 @@
 site_name: MCP Portal
-site_description: MCP Portal - technical documentation
+site_description: MCP Portal - Self-hosted analytics and data tools as MCP servers
 docs_dir: docs
 
 theme:
   name: material
   language: en
+  logo: images/logo.svg
+  favicon: images/logo.svg
   palette:
     scheme: default
     primary: black
@@ -12,8 +14,13 @@ theme:
   features:
     - navigation.tabs
     - navigation.sections
+    - navigation.indexes
     - navigation.top
+    - navigation.instant
+    - search.highlight
+    - search.suggest
     - content.code.copy
+    - content.code.annotate
 
 markdown_extensions:
   - admonition
@@ -22,14 +29,20 @@ markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
+  - pymdownx.tabbed:
+      alternate_style: true
   - tables
   - attr_list
+  - def_list
+  - md_in_html
+  - toc:
+      permalink: true
 
 nav:
   - Home: index.md
   - Getting started: getting-started.md
   - Connectors:
-    - Overview: connectors/index.md
+    - connectors/index.md
     - Matomo: connectors/matomo.md
     - Google Search Console: connectors/google-search-console.md
     - Castopod: connectors/castopod.md

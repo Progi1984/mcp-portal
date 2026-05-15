@@ -26,7 +26,8 @@ class McpServerController extends AbstractController
     public function __construct(
         private readonly CredentialsEncryptor $encryptor,
         private readonly EntityManagerInterface $em,
-    ) {}
+    ) {
+    }
 
     #[Route('', name: 'app_mcp_index', methods: ['GET'])]
     public function index(string $projectId, McpServerRepository $repo): Response
@@ -46,14 +47,14 @@ class McpServerController extends AbstractController
 
         return $this->render('mcp_server/select_type.html.twig', [
             'project' => $project,
-            'types'   => McpServerType::cases(),
+            'types' => McpServerType::cases(),
         ]);
     }
 
     #[Route('/new/{type}', name: 'app_mcp_new_type', methods: ['GET', 'POST'])]
     public function new(string $projectId, string $type, Request $request): Response
     {
-        $project    = $this->getOwnedProject($projectId);
+        $project = $this->getOwnedProject($projectId);
         $serverType = McpServerType::from($type);
 
         $server = new McpServer();
@@ -77,16 +78,16 @@ class McpServerController extends AbstractController
         }
 
         return $this->render('mcp_server/new.html.twig', [
-            'project'     => $project,
+            'project' => $project,
             'server_type' => $serverType,
-            'form'        => $form,
+            'form' => $form,
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_mcp_edit', methods: ['GET', 'POST'])]
     public function edit(string $projectId, McpServer $server, Request $request): Response
     {
-        $project    = $this->getOwnedProject($projectId);
+        $project = $this->getOwnedProject($projectId);
         $this->assertServerBelongsToProject($server, $project);
 
         $serverType = $server->getType();
@@ -113,10 +114,10 @@ class McpServerController extends AbstractController
         }
 
         return $this->render('mcp_server/edit.html.twig', [
-            'project'     => $project,
-            'server'      => $server,
+            'project' => $project,
+            'server' => $server,
             'server_type' => $serverType,
-            'form'        => $form,
+            'form' => $form,
         ]);
     }
 
@@ -171,20 +172,20 @@ class McpServerController extends AbstractController
     {
         return match ($type) {
             McpServerType::Castopod => new CastopodCredentials(
-                url:         $form->get('castopodUrl')->getData(),
-                username:    $form->get('castopodUsername')->getData(),
-                password:    $form->get('castopodPassword')->getData(),
-                op3ApiKey:   $form->get('castopodOp3ApiKey')->getData() ?: null,
+                url: $form->get('castopodUrl')->getData(),
+                username: $form->get('castopodUsername')->getData(),
+                password: $form->get('castopodPassword')->getData(),
+                op3ApiKey: $form->get('castopodOp3ApiKey')->getData() ?: null,
                 op3ShowUuid: $form->get('castopodOp3ShowUuid')->getData() ?: null,
             ),
             McpServerType::GoogleSearchConsole => new GoogleSearchConsoleCredentials(
                 serviceAccountJson: $form->get('gscServiceAccountJson')->getData(),
-                siteUrl:            $form->get('gscSiteUrl')->getData(),
+                siteUrl: $form->get('gscSiteUrl')->getData(),
             ),
             McpServerType::Matomo => new MatomoCredentials(
-                url:      $form->get('matomoUrl')->getData(),
+                url: $form->get('matomoUrl')->getData(),
                 apiToken: $form->get('matomoApiToken')->getData(),
-                siteId:   (int) $form->get('matomoSiteId')->getData(),
+                siteId: (int) $form->get('matomoSiteId')->getData(),
             ),
         };
     }
@@ -224,7 +225,7 @@ class McpServerController extends AbstractController
     {
         $project = $this->em->find(Project::class, $projectId);
 
-        if ($project === null) {
+        if (null === $project) {
             throw $this->createNotFoundException();
         }
 

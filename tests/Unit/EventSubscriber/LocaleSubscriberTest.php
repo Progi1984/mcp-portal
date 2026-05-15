@@ -77,7 +77,7 @@ class LocaleSubscriberTest extends TestCase
         $request = Request::create('/login');
         $request->setSession($session);
 
-        $user  = (new User())->setLocale('fr');
+        $user = (new User())->setLocale('fr');
         $event = $this->createMock(LoginSuccessEvent::class);
         $event->method('getUser')->willReturn($user);
         $event->method('getRequest')->willReturn($request);

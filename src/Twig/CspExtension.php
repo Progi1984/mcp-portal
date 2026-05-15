@@ -8,7 +8,9 @@ use Twig\TwigFunction;
 
 class CspExtension extends AbstractExtension
 {
-    public function __construct(private readonly CspNonceProvider $nonceProvider) {}
+    public function __construct(private readonly CspNonceProvider $nonceProvider)
+    {
+    }
 
     public function getFunctions(): array
     {

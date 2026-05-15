@@ -19,14 +19,14 @@ class CredentialsEncryptor
         $nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
         $ciphertext = sodium_crypto_secretbox(json_encode($data), $nonce, $this->key);
 
-        return base64_encode($nonce . $ciphertext);
+        return base64_encode($nonce.$ciphertext);
     }
 
     public function decrypt(string $encoded): array
     {
         $decoded = base64_decode($encoded, strict: true);
 
-        if ($decoded === false) {
+        if (false === $decoded) {
             throw new \RuntimeException('Failed to decrypt credentials.');
         }
 
@@ -35,7 +35,7 @@ class CredentialsEncryptor
 
         $plain = sodium_crypto_secretbox_open($ciphertext, $nonce, $this->key);
 
-        if ($plain === false) {
+        if (false === $plain) {
             throw new \RuntimeException('Failed to decrypt credentials.');
         }
 

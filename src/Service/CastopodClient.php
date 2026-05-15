@@ -9,15 +9,17 @@ class CastopodClient
 {
     private const OP3_API = 'https://op3.dev/api/1';
 
-    public function __construct(private readonly HttpClientInterface $httpClient) {}
+    public function __construct(private readonly HttpClientInterface $httpClient)
+    {
+    }
 
     public function testConnection(CastopodCredentials $credentials): array
     {
         try {
-            $data  = $this->get($credentials, '/podcasts');
+            $data = $this->get($credentials, '/podcasts');
             $count = count($data);
             $first = $data[0]['title'] ?? null;
-            $msg   = $first
+            $msg = $first
                 ? "Connected - {$count} podcast(s), first: \"{$first}\""
                 : "Connected - {$count} podcast(s)";
 
@@ -45,7 +47,7 @@ class CastopodClient
     {
         $params = ['page' => $page];
 
-        if ($podcastId !== null) {
+        if (null !== $podcastId) {
             $params['podcast_id'] = $podcastId;
         }
 
@@ -70,7 +72,7 @@ class CastopodClient
     {
         return $this->getOp3($credentials, '/queries/aggregate-downloads', [
             'showUuid' => $credentials->op3ShowUuid,
-            'format'   => 'json',
+            'format' => 'json',
         ]);
     }
 
@@ -85,10 +87,10 @@ class CastopodClient
 
     private function get(CastopodCredentials $credentials, string $path, array $query = []): array
     {
-        $url     = rtrim($credentials->url, '/').'/api/v1'.$path;
+        $url = rtrim($credentials->url, '/').'/api/v1'.$path;
         $options = [
             'auth_basic' => [$credentials->username, $credentials->password],
-            'timeout'    => 10,
+            'timeout' => 10,
         ];
 
         if ($query) {
@@ -101,14 +103,12 @@ class CastopodClient
     private function getOp3(CastopodCredentials $credentials, string $path, array $query = []): array
     {
         if (!$credentials->hasOp3()) {
-            throw new \RuntimeException(
-                'OP3 credentials (API key + Show UUID) are not configured on this connector.'
-            );
+            throw new \RuntimeException('OP3 credentials (API key + Show UUID) are not configured on this connector.');
         }
 
         return $this->httpClient->request('GET', self::OP3_API.$path, [
             'headers' => ['Authorization' => 'Bearer '.$credentials->op3ApiKey],
-            'query'   => $query,
+            'query' => $query,
             'timeout' => 15,
         ])->toArray();
     }

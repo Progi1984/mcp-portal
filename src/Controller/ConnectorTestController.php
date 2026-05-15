@@ -19,7 +19,8 @@ class ConnectorTestController extends AbstractController
     public function __construct(
         private readonly ConnectorTestService $testService,
         private readonly CredentialsEncryptor $encryptor,
-    ) {}
+    ) {
+    }
 
     /** Test with raw credentials from the form (before saving). */
     #[Route('/api/{type}/test', name: 'app_connector_test_raw', methods: ['POST'],
@@ -46,8 +47,8 @@ class ConnectorTestController extends AbstractController
         requirements: ['type' => '[a-z_]+'])]
     public function testServer(McpServer $server): JsonResponse
     {
-        $owner = $server->getProject()?->getUser();
-        if ($owner === null || $owner !== $this->getUser()) {
+        $owner = $server->getProject()->getUser();
+        if ($owner !== $this->getUser()) {
             return new JsonResponse(['success' => false, 'message' => 'Access denied.'], Response::HTTP_FORBIDDEN);
         }
 

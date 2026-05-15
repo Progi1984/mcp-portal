@@ -40,7 +40,7 @@ class ProjectVoterTest extends TestCase
 
     public function testGrantsAccessToProjectOwner(): void
     {
-        $owner   = new User();
+        $owner = new User();
         $project = (new Project())->setUser($owner);
 
         $result = $this->voter->vote($this->token($owner), $project, ['PROJECT_EDIT']);
@@ -49,8 +49,8 @@ class ProjectVoterTest extends TestCase
 
     public function testDeniesAccessToNonOwner(): void
     {
-        $owner   = new User();
-        $other   = new User();
+        $owner = new User();
+        $other = new User();
         $project = (new Project())->setUser($owner);
 
         $result = $this->voter->vote($this->token($other), $project, ['PROJECT_EDIT']);

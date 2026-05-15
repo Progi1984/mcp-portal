@@ -12,32 +12,33 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class GoogleSearchConsoleClient
 {
-    private const API_V3      = 'https://searchconsole.googleapis.com/webmasters/v3';
-    private const API_V1      = 'https://searchconsole.googleapis.com/v1';
-    private const TOKEN_URL   = 'https://oauth2.googleapis.com/token';
+    private const API_V3 = 'https://searchconsole.googleapis.com/webmasters/v3';
+    private const API_V1 = 'https://searchconsole.googleapis.com/v1';
+    private const TOKEN_URL = 'https://oauth2.googleapis.com/token';
     // Full scope required for the URL Inspection API (not just .readonly)
-    private const SCOPE       = 'https://www.googleapis.com/auth/webmasters';
-    private const TOKEN_TTL   = 3300; // 55 min - tokens expire after 60 min
+    private const SCOPE = 'https://www.googleapis.com/auth/webmasters';
+    private const TOKEN_TTL = 3300; // 55 min - tokens expire after 60 min
 
     public function __construct(
         private readonly HttpClientInterface $httpClient,
         private readonly CacheInterface $cache,
-    ) {}
+    ) {
+    }
 
     // ── Connection ───────────────────────────────────────────────────────────
 
     public function testConnection(GoogleSearchConsoleCredentials $credentials): array
     {
         try {
-            $token    = $this->getAccessToken($credentials);
-            $encoded  = rawurlencode($credentials->siteUrl);
+            $token = $this->getAccessToken($credentials);
+            $encoded = rawurlencode($credentials->siteUrl);
 
             $response = $this->httpClient->request('GET', self::API_V3."/sites/{$encoded}", [
                 'headers' => ['Authorization' => "Bearer {$token}"],
                 'timeout' => 10,
             ]);
 
-            $data    = $response->toArray();
+            $data = $response->toArray();
             $siteUrl = $data['siteUrl'] ?? $credentials->siteUrl;
 
             return ['success' => true, 'message' => "Connected - property: \"{$siteUrl}\""];
@@ -96,11 +97,11 @@ class GoogleSearchConsoleClient
         $response = $this->httpClient->request('POST', self::API_V1.'/urlInspection/index:inspect', [
             'headers' => [
                 'Authorization' => "Bearer {$token}",
-                'Content-Type'  => 'application/json',
+                'Content-Type' => 'application/json',
             ],
-            'json'    => [
+            'json' => [
                 'inspectionUrl' => $url,
-                'siteUrl'       => $credentials->siteUrl,
+                'siteUrl' => $credentials->siteUrl,
             ],
             'timeout' => 15,
         ]);
@@ -112,7 +113,7 @@ class GoogleSearchConsoleClient
 
     public function getSitemaps(GoogleSearchConsoleCredentials $credentials): array
     {
-        $token   = $this->getAccessToken($credentials);
+        $token = $this->getAccessToken($credentials);
         $encoded = rawurlencode($credentials->siteUrl);
 
         $response = $this->httpClient->request('GET', self::API_V3."/sites/{$encoded}/sitemaps", [
@@ -132,7 +133,7 @@ class GoogleSearchConsoleClient
         array $dimensions,
         int $rowLimit = 25,
     ): array {
-        $token   = $this->getAccessToken($credentials);
+        $token = $this->getAccessToken($credentials);
         $encoded = rawurlencode($credentials->siteUrl);
 
         $body = ['startDate' => $startDate, 'endDate' => $endDate, 'rowLimit' => $rowLimit];
@@ -144,9 +145,9 @@ class GoogleSearchConsoleClient
         $response = $this->httpClient->request('POST', self::API_V3."/sites/{$encoded}/searchAnalytics/query", [
             'headers' => [
                 'Authorization' => "Bearer {$token}",
-                'Content-Type'  => 'application/json',
+                'Content-Type' => 'application/json',
             ],
-            'json'    => $body,
+            'json' => $body,
             'timeout' => 15,
         ]);
 
@@ -156,7 +157,7 @@ class GoogleSearchConsoleClient
     private function getAccessToken(GoogleSearchConsoleCredentials $credentials): string
     {
         $serviceAccount = json_decode($credentials->serviceAccountJson, true, 512, \JSON_THROW_ON_ERROR);
-        $cacheKey       = 'gsc_token_' . sha1($serviceAccount['client_email']);
+        $cacheKey = 'gsc_token_'.sha1($serviceAccount['client_email']);
 
         return $this->cache->get($cacheKey, function (ItemInterface $item) use ($serviceAccount): string {
             $item->expiresAfter(self::TOKEN_TTL);
@@ -164,7 +165,7 @@ class GoogleSearchConsoleClient
             $response = $this->httpClient->request('POST', self::TOKEN_URL, [
                 'body' => [
                     'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-                    'assertion'  => $this->buildJwt($serviceAccount),
+                    'assertion' => $this->buildJwt($serviceAccount),
                 ],
                 'timeout' => 10,
             ]);
@@ -172,7 +173,7 @@ class GoogleSearchConsoleClient
             $data = $response->toArray();
 
             if (!isset($data['access_token'])) {
-                throw new \RuntimeException('Failed to obtain a Google access token: ' . ($data['error_description'] ?? 'unknown error'));
+                throw new \RuntimeException('Failed to obtain a Google access token: '.($data['error_description'] ?? 'unknown error'));
             }
 
             return $data['access_token'];
@@ -181,10 +182,15 @@ class GoogleSearchConsoleClient
 
     private function buildJwt(array $serviceAccount): string
     {
+        $privateKey = $serviceAccount['private_key'] ?? '';
+        if (!is_string($privateKey) || '' === $privateKey) {
+            throw new \InvalidArgumentException('Invalid service account: missing or empty private_key.');
+        }
+
         $config = Configuration::forAsymmetricSigner(
             new Sha256(),
-            InMemory::plainText($serviceAccount['private_key']),
-            InMemory::plainText(''),
+            InMemory::plainText($privateKey),
+            InMemory::plainText($privateKey),
         );
 
         $now = new \DateTimeImmutable();

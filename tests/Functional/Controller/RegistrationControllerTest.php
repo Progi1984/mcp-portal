@@ -18,11 +18,11 @@ class RegistrationControllerTest extends WebTestCase
     {
         parent::setUp();
         $this->client = static::createClient();
-        $container    = static::getContainer();
-        $this->em     = $container->get('doctrine.orm.entity_manager');
+        $container = static::getContainer();
+        $this->em = $container->get('doctrine.orm.entity_manager');
 
         $schemaTool = new SchemaTool($this->em);
-        $metadata   = $this->em->getMetadataFactory()->getAllMetadata();
+        $metadata = $this->em->getMetadataFactory()->getAllMetadata();
         $schemaTool->dropSchema($metadata);
         $schemaTool->createSchema($metadata);
     }
@@ -39,7 +39,6 @@ class RegistrationControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
-
     public function testAuthenticatedUserIsRedirectedToProjects(): void
     {
         $user = (new User())->setEmail('existing@test.com')->setPassword('x');
@@ -54,9 +53,9 @@ class RegistrationControllerTest extends WebTestCase
     public function testValidRegistrationCreatesUserAndRedirectsToLogin(): void
     {
         $crawler = $this->client->request('GET', '/register');
-        $form    = $crawler->filterXPath('//form')->first()->form([
-            'registration_form[email]'                 => 'new@example.com',
-            'registration_form[plainPassword][first]'  => 'password123',
+        $form = $crawler->filterXPath('//form')->first()->form([
+            'registration_form[email]' => 'new@example.com',
+            'registration_form[plainPassword][first]' => 'password123',
             'registration_form[plainPassword][second]' => 'password123',
         ]);
 
@@ -71,9 +70,9 @@ class RegistrationControllerTest extends WebTestCase
     public function testPasswordMismatchKeepsFormWithoutCreatingUser(): void
     {
         $crawler = $this->client->request('GET', '/register');
-        $form    = $crawler->filterXPath('//form')->first()->form([
-            'registration_form[email]'                 => 'new@example.com',
-            'registration_form[plainPassword][first]'  => 'password123',
+        $form = $crawler->filterXPath('//form')->first()->form([
+            'registration_form[email]' => 'new@example.com',
+            'registration_form[plainPassword][first]' => 'password123',
             'registration_form[plainPassword][second]' => 'doesnotmatch',
         ]);
 
@@ -88,9 +87,9 @@ class RegistrationControllerTest extends WebTestCase
     public function testPasswordTooShortKeepsFormWithoutCreatingUser(): void
     {
         $crawler = $this->client->request('GET', '/register');
-        $form    = $crawler->filterXPath('//form')->first()->form([
-            'registration_form[email]'                 => 'short@example.com',
-            'registration_form[plainPassword][first]'  => 'short',
+        $form = $crawler->filterXPath('//form')->first()->form([
+            'registration_form[email]' => 'short@example.com',
+            'registration_form[plainPassword][first]' => 'short',
             'registration_form[plainPassword][second]' => 'short',
         ]);
 

@@ -17,7 +17,8 @@ class RegistrationController extends AbstractController
     public function __construct(
         #[Autowire(param: 'app.registration_enabled')]
         private readonly bool $registrationEnabled,
-    ) {}
+    ) {
+    }
 
     #[Route('/register', name: 'app_register')]
     public function register(

@@ -19,11 +19,11 @@ class LocaleSwitcherControllerTest extends WebTestCase
         parent::setUp();
 
         $this->client = static::createClient();
-        $container    = static::getContainer();
-        $this->em     = $container->get('doctrine.orm.entity_manager');
+        $container = static::getContainer();
+        $this->em = $container->get('doctrine.orm.entity_manager');
 
         $schemaTool = new SchemaTool($this->em);
-        $metadata   = $this->em->getMetadataFactory()->getAllMetadata();
+        $metadata = $this->em->getMetadataFactory()->getAllMetadata();
         $schemaTool->dropSchema($metadata);
         $schemaTool->createSchema($metadata);
 

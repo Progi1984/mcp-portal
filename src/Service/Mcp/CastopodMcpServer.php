@@ -8,7 +8,9 @@ use App\ValueObject\CastopodCredentials;
 
 class CastopodMcpServer extends AbstractMcpServer
 {
-    public function __construct(private readonly CastopodClient $castopodClient) {}
+    public function __construct(private readonly CastopodClient $castopodClient)
+    {
+    }
 
     public function getSupportedType(): McpServerType
     {
@@ -35,23 +37,23 @@ class CastopodMcpServer extends AbstractMcpServer
         $credentials = CastopodCredentials::fromArray($rawCredentials);
 
         $data = match ($toolName) {
-            'list_podcasts'         => $this->castopodClient->listPodcasts($credentials),
-            'get_podcast'           => $this->castopodClient->getPodcast(
+            'list_podcasts' => $this->castopodClient->listPodcasts($credentials),
+            'get_podcast' => $this->castopodClient->getPodcast(
                 $credentials,
                 (int) $arguments['podcastId'],
             ),
-            'list_episodes'         => $this->castopodClient->listEpisodes(
+            'list_episodes' => $this->castopodClient->listEpisodes(
                 $credentials,
                 isset($arguments['podcastId']) ? (int) $arguments['podcastId'] : null,
                 (int) ($arguments['page'] ?? 1),
             ),
-            'get_episode'           => $this->castopodClient->getEpisode(
+            'get_episode' => $this->castopodClient->getEpisode(
                 $credentials,
                 (int) $arguments['episodeId'],
             ),
-            'get_download_stats'    => $this->castopodClient->getDownloadStats($credentials),
+            'get_download_stats' => $this->castopodClient->getDownloadStats($credentials),
             'get_downloads_over_time' => $this->castopodClient->getDownloadsOverTime($credentials),
-            'get_top_apps'          => $this->castopodClient->getTopApps($credentials),
+            'get_top_apps' => $this->castopodClient->getTopApps($credentials),
             default => throw new \InvalidArgumentException("Unknown tool: {$toolName}"),
         };
 
@@ -64,15 +66,15 @@ class CastopodMcpServer extends AbstractMcpServer
     {
         return [
             [
-                'name'        => 'list_podcasts',
+                'name' => 'list_podcasts',
                 'description' => 'Lists all podcasts hosted on the Castopod instance with their metadata (title, author, description, language).',
                 'inputSchema' => ['type' => 'object', 'properties' => [], 'required' => []],
             ],
             [
-                'name'        => 'get_podcast',
+                'name' => 'get_podcast',
                 'description' => 'Returns the full details of a podcast: title, description, author, artwork, categories, social links.',
                 'inputSchema' => [
-                    'type'       => 'object',
+                    'type' => 'object',
                     'properties' => [
                         'podcastId' => ['type' => 'integer', 'description' => 'Numeric podcast identifier'],
                     ],
@@ -80,22 +82,22 @@ class CastopodMcpServer extends AbstractMcpServer
                 ],
             ],
             [
-                'name'        => 'list_episodes',
+                'name' => 'list_episodes',
                 'description' => 'Lists episodes of a podcast with title, short description, duration, publication date and status. Supports pagination.',
                 'inputSchema' => [
-                    'type'       => 'object',
+                    'type' => 'object',
                     'properties' => [
                         'podcastId' => ['type' => 'integer', 'description' => 'Filter by podcast identifier (optional)'],
-                        'page'      => ['type' => 'integer', 'description' => 'Page number (default: 1)'],
+                        'page' => ['type' => 'integer', 'description' => 'Page number (default: 1)'],
                     ],
                     'required' => [],
                 ],
             ],
             [
-                'name'        => 'get_episode',
+                'name' => 'get_episode',
                 'description' => 'Returns the full details of an episode: long description, notes, audio URL, chapters, season, number.',
                 'inputSchema' => [
-                    'type'       => 'object',
+                    'type' => 'object',
                     'properties' => [
                         'episodeId' => ['type' => 'integer', 'description' => 'Numeric episode identifier'],
                     ],
@@ -109,17 +111,17 @@ class CastopodMcpServer extends AbstractMcpServer
     {
         return [
             [
-                'name'        => 'get_download_stats',
+                'name' => 'get_download_stats',
                 'description' => 'OP3 download statistics for this podcast: totals over 1, 7, 30 days and all-time. Bot-filtered data, IAB v2 compliant.',
                 'inputSchema' => ['type' => 'object', 'properties' => [], 'required' => []],
             ],
             [
-                'name'        => 'get_downloads_over_time',
+                'name' => 'get_downloads_over_time',
                 'description' => 'OP3 download time series (monthly and weekly) - visualises audience growth over time.',
                 'inputSchema' => ['type' => 'object', 'properties' => [], 'required' => []],
             ],
             [
-                'name'        => 'get_top_apps',
+                'name' => 'get_top_apps',
                 'description' => 'Breakdown of downloads by listening app (Apple Podcasts, Spotify, AntennaPod, Pocket Casts…) over the last 3 months.',
                 'inputSchema' => ['type' => 'object', 'properties' => [], 'required' => []],
             ],

@@ -13,7 +13,8 @@ class ConnectorTestService
         private readonly CastopodClient $castopodClient,
         private readonly GoogleSearchConsoleClient $gscClient,
         private readonly MatomoClient $matomoClient,
-    ) {}
+    ) {
+    }
 
     /**
      * Test a connector with raw credentials.
@@ -24,9 +25,9 @@ class ConnectorTestService
     public function test(McpServerType $type, array $credentials): array
     {
         return match ($type) {
-            McpServerType::Castopod            => $this->testCastopod($credentials),
+            McpServerType::Castopod => $this->testCastopod($credentials),
             McpServerType::GoogleSearchConsole => $this->testGsc($credentials),
-            McpServerType::Matomo              => $this->testMatomo($credentials),
+            McpServerType::Matomo => $this->testMatomo($credentials),
         };
     }
 
@@ -37,7 +38,7 @@ class ConnectorTestService
         }
 
         return $this->castopodClient->testConnection(new CastopodCredentials(
-            url:      $data['url'],
+            url: $data['url'],
             username: $data['username'],
             password: $data['password'],
         ));
@@ -51,7 +52,7 @@ class ConnectorTestService
 
         return $this->gscClient->testConnection(new GoogleSearchConsoleCredentials(
             serviceAccountJson: $data['serviceAccountJson'],
-            siteUrl:            $data['siteUrl'],
+            siteUrl: $data['siteUrl'],
         ));
     }
 
@@ -62,9 +63,9 @@ class ConnectorTestService
         }
 
         return $this->matomoClient->testConnection(new MatomoCredentials(
-            url:      $data['url'],
+            url: $data['url'],
             apiToken: $data['apiToken'],
-            siteId:   (int) $data['siteId'],
+            siteId: (int) $data['siteId'],
         ));
     }
 }

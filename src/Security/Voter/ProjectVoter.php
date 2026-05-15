@@ -11,7 +11,7 @@ class ProjectVoter extends Voter
 {
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return $attribute === 'PROJECT_EDIT' && $subject instanceof Project;
+        return 'PROJECT_EDIT' === $attribute && $subject instanceof Project;
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
